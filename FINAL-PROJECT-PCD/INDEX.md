@@ -15,15 +15,16 @@ Terakhir diperbarui: 2026-10-31
 - Batas Klaim: Alat ditujukan untuk skrining/edukasi awal, bukan diagnosis medis dan bukan pengganti pemeriksaan dokter gigi.
 
 ## Status saat ini
-Status proyek per 31 Oktober 2026 menunjukkan bahwa tim telah merampungkan *literature review* terarah dan menetapkan fokus pada deteksi karies gigi menggunakan dataset tunggal Zenodo dengan kontribusi utama berupa *pipeline* preprocessing adaptif berbasis aturan dengan beberapa function OpenCV (tanpa menggabung dataset lain). Hambatan saat ini meliputi ketiadaan judul definitif, keterbatasan informasi akses GPU, dan keahlian tim, dengan langkah selanjutnya yang memprioritaskan konfirmasi detail dataset Zenodo, penyusunan proposal, serta perumusan rekomendasi judul.
+Update status per 31 Oktober 2026 (sesi review dataset) mengonfirmasi bahwa analisis Dataset Zenodo (DOI 10.5281/zenodo.14827784, CC BY 4.0) via *script* lokal berhasil memverifikasi total 6.265 gambar (termasuk 2.752 *no_retractors* dari ~560 pasien berusia 10–24 tahun) serta menemukan kebocoran fatal pada *split benchmark* bawaan (65,6% set tersebar di >1 *split*). Untuk mengatasi hal ini, user sementara telah mengunci *split* buatan berbasis grup (*seed* 42, 70/15/15) dan menyepakati penggunaan seluruh 5 *view* dengan metrik utama berfokus pada *view* oklusal, sementara hambatan seperti kejelasan label kelas 0/1, akses GPU/pakar, serta penulisan proposal yang tenggatnya 4 November 2026 menjadi prioritas penanganan berikutnya.
 
 (Detail lengkap: STATUS.md)
 
 ## Langkah berikutnya
-1. Konfirmasi dataset Zenodo: record yang dipakai (ada record berkas terbatas), lisensi, jumlah subset tanpa retraktor, ID pasien, definisi kelas.
-2. Susun proposal: problem statement, latar belakang, proposed solution, deskripsi dataset.
-3. Rekomendasi judul berdasarkan gap yang ditemukan di sesi sebelumnya (Detail lihat STATUS.md)
-4. Setelah proposal: baseline YOLO, lalu pipeline preprocessing.
+1. Tulis proposal; angka di atas dipakai untuk deskripsi dataset dan keterbatasan.
+2. Tulis klaim sesuai data: deteksi lesi karies pada foto intraoral, metrik utama di view oklusal, frontal/lateral deskriptif; BUKAN skrining populasi umum dan bukan klaim foto pengguna awam; populasi terbatas remaja/dewasa muda (abstrak: usia 10–24, Medium).
+3. Konfirmasi makna kelas 0/1 dari teks penuh makalah (Nature/PMC dibuka manual; akses otomatis diblokir) atau penulis. Sementara pakai evaluasi satu kelas (`single_cls`) sebagai metrik utama.
+4. Cek visual beberapa dari 23 kotak bermasalah.
+5. Setelah proposal: kurva belajar (25/50/100% data latih), baseline YOLO di `dataset_split`, lalu pipeline preprocessing. Karena daya uji rendah (±383 grup latih, 83 grup uji), pertimbangkan 5-fold per grup + bootstrap per grup + beberapa seed.
      
 ## Keputusan penting (final)
 - Tema project yang diambil adalah skrining kesehatan gigi via kamera smartphone. Alasan: Keputusan tim yang sudah final
@@ -44,3 +45,4 @@ Status proyek per 31 Oktober 2026 menunjukkan bahwa tim telah merampungkan *lite
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/REQUIREMENTS.md | perlu mengetahui detail spesifik ketentuan dari dosen |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/DECISIONS.md | akan mengusulkan perubahan arah |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/intenal_teams_files/literature-review.md | butuh melihat hasil literature review yang telah dikumpulkan |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/extras/log_history.md | perlu meninjau apa saja yang telah dilakukan di sesi sesi sebelumnya |
