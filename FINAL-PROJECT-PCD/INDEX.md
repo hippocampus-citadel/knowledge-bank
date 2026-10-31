@@ -15,18 +15,21 @@ Terakhir diperbarui: 2026-10-31
 - Batas Klaim: Alat ditujukan untuk skrining/edukasi awal, bukan diagnosis medis dan bukan pengganti pemeriksaan dokter gigi.
 
 ## Status saat ini
-Saat ini masih ditahap literature review mandiri bersama tim. Judul belum diajukan, tanggal 4 November 2026 sudah harus jadi proposal yang memuat mengambil topik apa (merujuk pada REQUIREMENT.md), problem statement, latar belakang, hasil studi literatur (yang menjelaskan hubungannya apa, apa yang didapatkan dri rujukan, dan apa gapnya), proposed solution (usulan) dan dataset description (datanya dari mana). Untuk saat ini baru topik dan masalah yang baru ditemukan, literature review masih raw karena tim hanya mengumpulkan sumber tanpa mengarah ke kesimpulan gap dan metode yang ingin digunakan (detailnya lihat di literature-review.md).
+Status proyek per 31 Oktober 2026 menunjukkan bahwa tim telah merampungkan *literature review* terarah dan menetapkan fokus pada deteksi karies gigi menggunakan dataset tunggal Zenodo dengan kontribusi utama berupa *pipeline* preprocessing adaptif berbasis aturan dengan beberapa function OpenCV (tanpa menggabung dataset lain). Hambatan saat ini meliputi ketiadaan judul definitif, keterbatasan informasi akses GPU, dan keahlian tim, dengan langkah selanjutnya yang memprioritaskan konfirmasi detail dataset Zenodo, penyusunan proposal, serta perumusan rekomendasi judul.
 
-(Daftar lengkap: STATUS.md)
+(Detail lengkap: STATUS.md)
 
 ## Langkah berikutnya
-1. Lakukan literature review ulang yang mengarah ke penemuan gap dari penelitian sebelumnya
-2. Berikan rekomendasi judul berdasarkan hasil literature review terarah sebelumnya
-
+1. Konfirmasi dataset Zenodo: record yang dipakai (ada record berkas terbatas), lisensi, jumlah subset tanpa retraktor, ID pasien, definisi kelas.
+2. Susun proposal: problem statement, latar belakang, proposed solution, deskripsi dataset.
+3. Rekomendasi judul berdasarkan gap yang ditemukan di sesi sebelumnya (Detail lihat STATUS.md)
+4. Setelah proposal: baseline YOLO, lalu pipeline preprocessing.
+     
 ## Keputusan penting (final)
 - Tema project yang diambil adalah skrining kesehatan gigi via kamera smartphone. Alasan: Keputusan tim yang sudah final
 - Sistem final akan terdiri dari layer pemrosesan citra + deteksi dan layer aplikasi web. Alasan: Ketentuan dari dosen untuk layer deteksi dibungkus aplikasi dan bukan notebook python biasa
 - Preprocessing dan kualitas foto sebelum deteksi menjadi fokus kontribusi yang akan diuji. Alasan: lihat rubrik penilaian di REQUIREMENTS.md
+
 (Daftar lengkap: DECISIONS.md)
 
 ## Batasan / requirement khusus
