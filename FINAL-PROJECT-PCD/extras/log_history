@@ -1,0 +1,11 @@
+- **[31-10-2026-09-45]**
+  - Membaca INDEX, SOP, PREFERENCES, dan REQUIREMENTS (STATUS dan DECISIONS tidak dibuka).
+  - Literature review terarah (±25 artikel; yang dibaca abstrak dan potongan isi, bukan teks penuh; status Scopus BELUM diverifikasi, cek per ISSN). Gap mayoritas:
+    (1) performa foto ponsel tertinggal (F1 ponsel 42,8–80% vs kamera profesional 68,3–95,4%, Moharrami dkk. 2024) dan recall rendah;
+    (2) banyak studi memakai gigi cabut atau kamera intraoral, bukan foto pengguna awam;
+    (3) uji lintas perangkat jarang (dataset Zenodo hanya satu perangkat);
+    (4) preprocessing dan kualitas foto jarang menjadi variabel utama (Ding 2021 dan Park 2022 hanya sampingan);
+    (5) pelaporan lemah (XAI hanya 3 dari 23 studi, aplikasi terdeploy hanya 4 studi);
+    (6) uji pengguna awam terbatas (AICaries, OralCam).
+  - Bukti VLM 2026: Gemini zero-shot sensitivitas tinggi tetapi presisi rendah (over-detection); YOLO lebih akurat untuk lokalisasi.
+  - Penilaian feasibility terhadap rubrik dosen (tahap klasik pengolahan citra harus terlihat dan dianalisis per tahap).
