@@ -2,7 +2,7 @@
 
 > Terakhir diperbarui: 2026-10-31
 
-## DECISION UPDATE untuk [em***********nt (2026-10-31 15:45)]
+## DECISION UPDATE untuk [CLAUDE em***********nt (2026-10-31 15:45)]
 Keputusan baru (+ alasan 1 kalimat):
 
 - [KEPUTUSAN USER, kecenderungan] Memakai semua 5 view, bukan hanya oklusal: sesuai narasi smartphone. Syarat dari AI: metrik utama di oklusal karena positif frontal/lateral hanya 96 gambar.
