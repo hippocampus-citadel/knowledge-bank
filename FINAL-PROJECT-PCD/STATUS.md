@@ -6,18 +6,12 @@
 
 ## Saat ini
 
-- Proposal sementara jatuh tempo 4 November 2026; belum ditulis.
-- Judul belum ada
-- Belum diketahui: arti kelas 0/1, penyebab 23 kotak bermasalah, apakah "tanpa label" = tanpa karies, ID record terbatas yang tepat.
+- Perlu membuat task assignment untuk Project Report selanjutnya
+- Judul sudah diterima, detailnya lihat di `proposal_feedback.md`
 - Terhambat sejak sebelumnya (belum berubah): akses GPU, keahlian tiga anggota, akses dokter gigi.
 
 ## Langkah berikutnya
-
-1. Tulis proposal; angka di atas dipakai untuk deskripsi dataset dan keterbatasan.
-2. Tulis klaim sesuai data: deteksi lesi karies pada foto intraoral, metrik utama di view oklusal, frontal/lateral deskriptif; BUKAN skrining populasi umum dan bukan klaim foto pengguna awam; populasi terbatas remaja/dewasa muda (abstrak: usia 10–24, Medium).
-3. Konfirmasi makna kelas 0/1 dari teks penuh makalah (Nature/PMC dibuka manual; akses otomatis diblokir) atau penulis. Sementara pakai evaluasi satu kelas (`single_cls`) sebagai metrik utama.
-4. Cek visual beberapa dari 23 kotak bermasalah.
-5. Setelah proposal: kurva belajar (25/50/100% data latih), baseline YOLO di `dataset_split`, lalu pipeline preprocessing. Karena daya uji rendah (±383 grup latih, 83 grup uji), pertimbangkan 5-fold per grup + bootstrap per grup + beberapa seed.
+1. Membuat task assignment dan penentuan weekly progressnya
 
 ## Pertanyaan terbuka
 
