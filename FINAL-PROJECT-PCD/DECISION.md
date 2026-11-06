@@ -2,6 +2,9 @@
 
 > Terakhir diperbarui: 2026-10-31
 
+## DECISION UPDATE untuk [USER (2026-11-07 01:55)]
+- Judul resmi: Implementasi Teknik Pengolahan Citra Digital untuk Meningkatkan Deteksi Lesi Karies pada Foto Intraoral Remaja dan Dewasa Muda Berbasis Aplikasi Web
+
 ## DECISION UPDATE untuk [CLAUDE em***********nt (2026-10-31 15:45)]
 Keputusan baru (+ alasan 1 kalimat):
 
@@ -17,5 +20,3 @@ Keputusan baru (+ alasan 1 kalimat):
 - [KEPUTUSAN USER] Pipeline preprocessing dibuat adaptif (tidak kaku): diinginkan user.
 - [REKOMENDASI AI, BELUM DIPUTUSKAN TIM] Satu masalah utama (karies); gingivitis hanya jika dataset terverifikasi dan dievaluasi terpisah; gigi bungsu tidak layak dari foto; plak dan kalkulus feasibility rendah.
 - [REKOMENDASI AI, BELUM DIPUTUSKAN TIM] Adaptif berbasis aturan di OpenCV (ukur kualitas, lalu pilih tindakan), bukan model terlatih; eksperimen empat kondisi (tanpa preprocessing, tetap, adaptif, adaptif + quality gate) dengan metrik mAP50 dan recall; degradasi buatan pada test set; VLM hanya sebagai pembanding; Streamlit/Flask, bukan Flutter.
-
-(Daftar lengkap: DECISIONS.md)
