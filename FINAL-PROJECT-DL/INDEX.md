@@ -6,27 +6,28 @@
 >
 > Jika tidak bisa membuka link, minta user menempelkan isinya.
 
-Terakhir diperbarui: 2026-11-1
+Terakhir diperbarui: 2026-11-7
 
 ## Ringkasan
-- Tujuan: Mengembangkan dan mengevaluasi model Deep Learning untuk menyelesaikan suatu permasalahan nyata untuk memenuhi proyek akhir mata kuliah Deep Learning
+- Tujuan: Mengembangkan dan mengevaluasi model Deep Learning dari dataset UCI Human Activity Recognition sebagai proyek akhir mata kuliah Deep Learning
 - Stack: Python (mainly, rinciannya masih belum dapat ditentukan)  
 - Tipe: Tugas Proyek Akhir Mata Kuliah Deep Learning
 
 ## Status saat ini
-Saat ini proyek masih dalam tahap brainstorming ide dan belum menentukan ingin membuat model apa, namun scope-nya sudah jelas mengikuti `REQUIREMENTS.md`. Dosen meminta proposal proyek akhir yang detailnya dapat dilihat pada `REQUIREMENTS.md` bagian 10. Deadline proposalnya adalah 5 November 2026 secara internal, karena 6 November 2026 proposalnya akan dipresentasikan di depan dosen. Berdasarkan sesi diskusi internal 30 Oktober 2026, ada dua ide yang sudah diajukan yakni Deteksi Rambu Lalu Lintas pada Smart Vehicle yang merujuk pada dataset GTSRB dan Klasifikasi Suara Burung yang merujuk pada dataset xeno-canto, keduanya belum ada yang dikunci sebagai ide akhir. 
+Saat ini proyek sudah resmi on going setelah judul Klasifikasi Aktivitas Manusia Menggunakan Data Sensor Smartphone telah disetujui dosen dengan beberapa catatan evaluasi proposal. Tahap selanjutnya adalah membersihkan dataset UCI Human Activity Recognition (HAR) sebelum melakukan eksperimen training dengan beberapa model time series. Nantinya sementara hasil dari preprocessing sekaligus EDA dari dataset ini akan menjadi Weekly Progress Report minggu ini.
 
 ## Langkah berikutnya
-1. Membantu melakukan brainstorming ide dengan batasan scope yang sudah dirincikan pada `REQUIREMENTS.md`
-2. Membantu memeriksa tingkat urgency dan seberapa standout ide yang akan diangkat, namun tetap memeriksa detail feasibility-nya secara realistis
-3. Membantu menyusun proposal setelah ide sudah disetujui oleh tim (tunggu feedback dari diskusi internal user dengan tim)
+1. Mengonfirmasi ulang feedback dari dosen untuk menyusun langkah progress ke depan
+2. Membantu melakukan pembersihan data dan preprocessing sehingga dataset sudah siap dipakai seluruh anggota tim tanpa konflik metode preprocessing 
+3. Membantu menyusun Weekly Progress Report berdasarkan progress yang diberikan oleh user
 
 ## Keputusan penting (final)
-- Proposal harus sudah selesai per 5 November 2026
+- Judul resmi proyek adalah Klasifikasi Aktivitas Manusia Menggunakan Data Sensor Smartphone
+- Dataset yang digunakan adalah Human Activity Recognition Using Smartphones dari UCI Machine Learning Repository
 (Daftar lengkap: DECISIONS.md)
 
 ## Batasan / requirement khusus
-- Deadline: Proposal 5 November 2026, Deadline final akan menyusul
+- Deadline: Weekly Progress Report sudah harus ada tanggal 12 November 2026, Deadline final akan menyusul
 - Aturan dosen: lihat `REQUIREMENTS.md` 
 - Hal yang tidak boleh diubah: `None`
 
@@ -36,4 +37,4 @@ Saat ini proyek masih dalam tahap brainstorming ide dan belum menentukan ingin m
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/STATUS.md | perlu detail progres |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/REQUIREMENTS.md | perlu latar belakang / spesifikasi |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/DECISIONS.md | akan mengusulkan perubahan arah |
-| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/extra/<file>.md | `None` |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/extra/proposal_feedback.md | perlu membaca feedback proposal proyek akhir dari dosen |
