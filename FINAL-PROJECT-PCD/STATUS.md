@@ -1,26 +1,43 @@
 # STATUS PROJECT
 
-> Terakhir diperbarui: 2026-10-31
+> Terakhir diperbarui: 2026-11-09
 
-**`[USER (2026-11-07 01:45)]`**
+**`[CLAUDE @w30 (2026-11-09)]`**
 
 ## Saat ini
-
-- Perlu membuat task assignment untuk Project Report selanjutnya
-- Judul sudah diterima, detailnya lihat di `proposal_feedback.md`
-- Terhambat sejak sebelumnya (belum berubah): akses GPU, keahlian tiga anggota, akses dokter gigi.
-
+  - Replikasi parsial [8] pada split benchmark bawaan (YOLOv8s, Adam, jadwal 164 epoch, batch 64 lalu 32 setelah 2x resume di epoch 86 dan 134; imgsz 640, seed 0, bobot awal COCO, GPU T4). Hasil test, bobot best.pt: multi-kelas P 0,751 / R 0,761 / mAP50 0,771; single_cls P 0,790 / R 0,876 / mAP50 0,911. Makalah: P 0,828 / R 0,807 / mAP50 0,841 (definisi evaluasi tidak disebut). Kesimpulan: pipeline berfungsi (uji kewajaran); BUKAN klaim reproduksi berhasil. Draf laporan replikasi sudah ditulis (belum ada di repo).
+  - Baseline ablasi seed 0 di `dataset_split_v2` selesai (50 epoch, batch 32, imgsz 640, Adam, workers 1). Test single_cls: P 0,814 / R 0,847 / mAP50 0,902 / mAP50-95 0,721; multi-kelas mAP50 0,708. Subset: no_retractors 0,916, retractors 0,893 (satu seed, belum bermakna). Seed 0 sempat hilang (bobot gagal tersimpan di Drive) lalu diulang; val mAP50 multi-kelas ulang 0,694 vs 0,695 sebelumnya.
+- Sedang berjalan / terhambat:
+  - Baseline seed 1 dan 2 di `dataset_split_v2` BELUM dijalankan. Paket baseline beku untuk Anggota B BELUM diserahkan. Tahap 1 belum dimulai.
+  - Kendala utama: batas GPU Colab gratis dan pindah akun/sesi. Masalah berulang: Drive tidak ter-mount di runtime baru; folder bersama tidak terlihat tanpa pintasan di My Drive; hasil training yang ditulis langsung ke Drive hilang diam-diam; versi Ultralytics bergeser (8.4.204, 8.4.207, 8.4.208); RAM sistem jebol pada batch 64 + workers 2.
+    
 ## Langkah berikutnya
-1. Membuat task assignment dan penentuan weekly progressnya
+  1. Buat `config.json` di Drive (versi Ultralytics terkunci, nama zip split, md5 `split.csv` v2, epoch, batch, imgsz, workers, optimizer). Hitung dan isi md5 split sekali, lalu jangan diubah.
+  2. Setiap sesi mulai dengan Sel 0 (bootstrap): mount Drive, assert folder proyek terlihat, pasang `ultralytics==<versi config>` dan assert versinya, uji tulis Drive, ekstrak split dan assert md5, tulis `data.yaml`. Jika ada assert gagal, JANGAN lanjut.
+  3. Jalankan seed 1 dan 2 dengan prosedur di bagian "Protokol sambung training". Satu seed per sesi bila kuota terbatas.
+  4. Bekukan paket untuk B: notebook (Sel 0 + loop), config.json, `baseline_raw_results.csv`, catatan versi, daftar gambar yang dikecualikan otomatis.
+  5. Perbaiki TEAM-ROLES.md: split = `dataset_split_v2` (bukan benchmark bawaan), lisensi dataset CC BY 4.0, jumlah gambar benchmark 6.266, makna kelas 0/1 tidak diketahui.
+  6. Tetapkan tertulis metrik utama dan kriteria "tahap berkontribusi tinggi" sebelum Tahap 1.
+  7. Uji kecukupan 50 epoch: raw dan satu kondisi terbaik pada 50 vs 164 epoch, 2–3 seed, margin ditetapkan di awal; periksa apakah arah efek preprocessing tetap sama.
+
+- Protokol sambung training (WAJIB, agar tidak salah versi, konfigurasi, atau path):
+  - Jalur kanonik hasil: `/content/drive/MyDrive/final_project_pcd/runs_v2/<kondisi>_s<seed>/`. Hanya SATU akun yang menjalankan training; akun lain hanya berbagi folder dan WAJIB menambah pintasan di My Drive (klik kanan folder di "Shared with me" → Organize → Add shortcut), lalu `drive.mount(..., force_remount=True)`.
+  - Training ditulis ke disk lokal Colab (`/content/runs_local`), BUKAN langsung ke Drive. Setelah selesai: salin ke Drive, `os.sync()`, assert ukuran `best.pt` dan `last.pt` sama, baru tulis penanda selesai. Verifikasi juga lewat browser dan unduh `best.pt` ke laptop.
+  - Gunakan `plots=False` (galat `results.csv` pada langkah plot pernah membatalkan evaluasi).
+  - Resume: salin `last.pt` dari Drive ke lokal, ubah `train_args` (batch, workers, project, name, save_dir) lewat `torch.load`/`torch.save`, cek `save_dir` tercetak berawal `/content/runs_local/` (atau `/content/repro_local/`), lalu `train(resume=True)`. Callback mencadangkan `last.pt` tiap 5 epoch; best.pt TIDAK ikut dicadangkan (perbaiki: cadangkan juga).
+  - Catat setiap sesi di `LOG.md`: tanggal, akun, run, md5 split, versi Ultralytics, epoch terakhir, jalur hasil.
+  - Jangan menjalankan sel ad hoc di luar notebook; jangan mencampur sel reproduksi dengan notebook baseline (variabel `DATA` tertimpa).
+  - Preprocessing (B) tidak boleh mengubah geometri (resize, crop, rotasi, flip) maupun nama berkas.
+
 
 ## Pertanyaan terbuka
-
-- Arti kelas 0 dan 1?
-- Apakah gambar tanpa label benar-benar negatif?
-- Target populasi final (data menunjuk remaja/dewasa muda)?
-- Apakah pipeline adaptif lebih baik daripada pipeline tetap? (hipotesis, belum terbukti; hasil nol tetap sah) [dari update sebelumnya]
-- Apakah ada studi yang memvalidasi skor OHI-S/DMF-T dari foto? (belum dicari) [dari update sebelumnya]
-
+ - Selisih jumlah gambar val benchmark (625 terbaca vs 627 dari analisis berkas): penyebab belum diketahui; apakah pilot ikut terbaca di reproduksi belum diperiksa.
+  - Versi Ultralytics yang dipakai untuk seed 0 v2 setelah diulang belum tercatat; config akan mengunci 8.4.207, tetapi seed 0 perlu dicek apakah sama.
+  - Asal best.pt replikasi tidak pasti (kurva epoch 87–134 hilang; diduga ditulis pada 29 epoch terakhir). last.pt replikasi belum dievaluasi.
+  - Apakah 50 epoch cukup (mAP50 val replikasi naik 0,765 → 0,799 pada fase akhir jadwal); belum terbukti.
+  - Jumlah gambar/grup test v2, tingkat pasangan retractors–no_retractors, dan jumlah positif per subset/view v2 perlu dicatat dari keluaran pembuatan split.
+  - Makna kelas 0/1; konfirmasi ke dosen soal tafsir "split yang sama"; tanggal final; format weekly progress 11 November.
+    
 ## Riwayat 
 
 - Selesai sesi ini:
