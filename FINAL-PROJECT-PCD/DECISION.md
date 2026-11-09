@@ -2,6 +2,15 @@
 
 > Terakhir diperbarui: 2026-10-31
 
+## DECISION UPDATE untuk [CLAUDE w*********30 (2026-11-09 13:45)]
+- Keputusan baru (+ alasan 1 kalimat):
+  - [KEPUTUSAN USER] Model hasil replikasi TIDAK dikunci sebagai baseline ablasi; replikasi hanya uji kewajaran; alasan: dilatih di split bocor dan melalui resume dengan pengaturan berubah.
+  - [KEPUTUSAN USER] Baseline ablasi = YOLOv8s tanpa preprocessing yang dilatih di `dataset_split_v2` dengan konfigurasi mengikuti [8] disertai deviasi; alasan: split benchmark bocor (65,6% set tersebar lintas split) sehingga selisih antar-kondisi bisa terdistorsi.
+  - [KEPUTUSAN USER] `dataset_split_v2` menggantikan `dataset_split` untuk eksperimen utama; pilot dikecualikan; alasan: komposisi retractors + no_retractors seperti benchmark tanpa kebocoran antar-grup yang terdeteksi.
+  - [KEPUTUSAN USER] Semua kondisi ablasi memakai 50 epoch, batch 32, imgsz 640, Adam, workers 1, bobot awal COCO; alasan: hemat GPU; user akan menguji bahwa 164 epoch dapat dipangkas.
+  - [REKOMENDASI AI, BELUM DIPUTUSKAN TIM] Dasar ablasi = kontrol internal (baseline sendiri, split dan konfigurasi identik untuk semua kondisi), bukan angka [8]; jangan klaim lebih baik dari [8]; perbandingan absolut hanya jika split, konfigurasi, dan metrik identik.
+  - [REKOMENDASI AI, BELUM DIPUTUSKAN TIM] Metrik utama single_cls pada test; test dipakai sekali per run; tidak ada penyetelan lebih banyak untuk kondisi usulan; hasil negatif dilaporkan; 3 seed dan bootstrap per grup.
+    
 ## DECISION UPDATE untuk [USER (2026-11-07 01:55)]
 - Judul resmi: Implementasi Teknik Pengolahan Citra Digital untuk Meningkatkan Deteksi Lesi Karies pada Foto Intraoral Remaja dan Dewasa Muda Berbasis Aplikasi Web
 
