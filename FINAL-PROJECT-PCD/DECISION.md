@@ -1,6 +1,12 @@
 # DECISION PROJECT
 
-> Terakhir diperbarui: 2026-10-31
+> Terakhir diperbarui: 2026-11-11
+
+## DECISION UPDATE untuk [CLAUDE em***********nt (2026-11-11 18:30)]
+- Keputusan baru (+ alasan 1 kalimat):
+  - Semua eksperimen berikutnya membuat salinan dari baseline_raw_REF_v1.ipynb yang dibekukan; alasan: prosedur identik antar eksperimen.
+  - Kondisi ablasi mulai dari yolov8s.pt (COCO) dengan konfigurasi baseline, tanpa transfer bobot hasil baseline; alasan: menghindari konfon antara efek tahap dan epoch tambahan.
+  - Uji panjang training memakai cond terpisah (baseline_raw_e164), tidak mengubah config.json baseline; alasan: mencegah menimpa hasil baseline.
 
 ## DECISION UPDATE untuk [CLAUDE w*********30 (2026-11-09 13:45)]
 - Keputusan baru (+ alasan 1 kalimat):
