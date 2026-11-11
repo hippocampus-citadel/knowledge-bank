@@ -6,7 +6,7 @@
 >
 > Jika tidak bisa membuka link, minta user menempelkan isinya.
 
-Terakhir diperbarui: 2026-10-31
+Terakhir diperbarui: 2026-11-11
 
 ## Ringkasan
 - Tujuan: Mengembangkan prototipe sistem skrining awal yang menganalisis foto rongga mulut dari kamera smartphone untuk menampilkan indikasi beberapa kondisi gigi dan gusi.
@@ -15,18 +15,18 @@ Terakhir diperbarui: 2026-10-31
 - Batas Klaim: Alat ditujukan untuk skrining/edukasi awal, bukan diagnosis medis dan bukan pengganti pemeriksaan dokter gigi.
 
 ## Status saat ini
-Status proyek per 9 November 2026 menunjukkan bahwa replikasi parsial pada *split benchmark* bawaan telah selesai sebagai uji kewajaran (*baseline* YOLOv8s dengan mAP50 *single_cls* 0,911), sementara eksperimen ablasi dengan *split* baru (`dataset_split_v2`, *seed* 0) mencatatkan mAP50 *single_cls* 0,902. Hambatan operasional saat ini berpusat pada keterbatasan kuota GPU Colab gratis, sinkronisasi Google Drive, dan inkonsistensi versi Ultralytics, sehingga langkah prioritas berikutnya meliputi penguncian konfigurasi via `config.json`, pembakuan protokol sambung *training*, eksekusi *seed* 1 dan 2.
+Status proyek per 11 November 2026 melaporkan bahwa baseline raw (YOLOv8s, split v2) untuk seed 0, 1, dan 2 telah rampung dengan stabil (test single_cls mAP50 di kisaran 0,8978–0,9021; SD ≈ 0,0024), uji 164 epoch menunjukkan overfitting ringan tanpa kenaikan metrik signifikan, dan makna kelas YOLO 0/1 berhasil diverifikasi 100% sebagai karies gigi permanen (D) dan gigi susu (d) berdasarkan perbandingan berkas LabelMe. Hambatan operasional meliputi kendala Weekly Progress yang jatuh tempo, inkonsistensi folder di Google Drive akibat akun non-pemilik, serta paket Anggota B yang belum dibekukan, sehingga langkah prioritas berikutnya mencakup pembekuan paket Anggota B, penetapan metrik keputusan dan margin secara tertulis, pembersihan data sensitif, serta pengunduhan bobot best.pt ke laptop.
 
 (Detail lengkap: STATUS.md)
 
 ## Langkah berikutnya
-1. Buat `config.json` di Drive (versi Ultralytics terkunci, nama zip split, md5 `split.csv` v2, epoch, batch, imgsz, workers, optimizer). Hitung dan isi md5 split sekali, lalu jangan diubah.
-2. Setiap sesi mulai dengan Sel 0 (bootstrap): mount Drive, assert folder proyek terlihat, pasang `ultralytics==<versi config>` dan assert versinya, uji tulis Drive, ekstrak split dan assert md5, tulis `data.yaml`. Jika ada assert gagal, JANGAN lanjut.
-3. Jalankan seed 1 dan 2 dengan prosedur di bagian "Protokol sambung training". Satu seed per sesi bila kuota terbatas.
-4. Bekukan paket untuk B: notebook (Sel 0 + loop), config.json, `baseline_raw_results.csv`, catatan versi, daftar gambar yang dikecualikan otomatis.
-5. Perbaiki jobdesc-week-1.md: split = `dataset_split_v2` (bukan benchmark bawaan), lisensi dataset CC BY 4.0, jumlah gambar benchmark 6.266, makna kelas 0/1 tidak diketahui.
-6. Tetapkan tertulis metrik utama dan kriteria "tahap berkontribusi tinggi" sebelum Tahap 1.
-7. Uji kecukupan 50 epoch: raw dan satu kondisi terbaik pada 50 vs 164 epoch, 2–3 seed, margin ditetapkan di awal; periksa apakah arah efek preprocessing tetap sama.
+  1. Bekukan paket untuk B: notebook, config.json, baseline_raw_results.csv (18 baris), catatan versi, daftar gambar yang dikecualikan otomatis.
+  2. Tetapkan tertulis sebelum Tahap 1: metrik utama, kriteria "tahap berkontribusi tinggi", margin. USULAN sesi ini (belum diputuskan): metrik keputusan = val single_cls mAP50 (test hanya laporan akhir); ambang = kelipatan SD antar-seed; tambah kontrol "identity" (raw lewat jalur baca-tulis yang sama); multi-kelas deskriptif.
+  3. Perbaiki jobdesc-week-1 dan dokumen lain: split v2; makna kelas D/d dan pemetaan 0/1; jumlah benchmark 6.266; catatan M/m sebagai keterbatasan; hapus entri split v1 seed 42 beserta larangannya di STATUS.md lama (sudah usang).
+  4. Unduh best.pt seed 1 (50 epoch) dan e164 ke laptop, catat md5. Pastikan best.pt/last.pt seed 0 yang sah (md5 aa7628bb...) ada di folder Drive pemilik. Catat sambung lintas akun e164 di LOG.md pemilik.
+  5. Uji 50 vs 164 untuk kondisi terbaik menunggu Tahap 1; bagian raw sudah ada. Pilihan lebih murah sekitar 100 epoch = usulan, belum diputuskan.
+  6. SOP bagian 6: pastikan tidak ada email di notebook atau LOG.md yang masuk repo (versi lama baseline_raw_seed2.ipynb memuatnya).
+  7. Opsional (usulan): satu pasang run raw vs kondisi terbaik di split benchmark paper sebagai pembanding sekunder untuk arahan dosen.
 
 ## Keputusan penting (final)
 - Judul resmi project ini adalah Implementasi Teknik Pengolahan Citra Digital untuk Meningkatkan Deteksi Lesi Karies pada Foto Intraoral Remaja dan Dewasa Muda Berbasis Aplikasi Web
