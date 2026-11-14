@@ -13,14 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # perlu riwayat penuh untuk tanggal ?v= per file
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Apply snapshot
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          MODEL: ${{ vars.MODEL }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}   # opsional (ringkasan INDEX)
+          MODEL: ${{ vars.MODEL }}                                  # opsional
         run: python scripts/apply_snapshot.py
       - name: Commit
         run: |
@@ -28,7 +30,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -- "$PROJECT_DIR"
           git diff --cached --quiet && echo "no changes" && exit 0
-          git commit -m "snapshot #${{ github.event.issue.number }}"
+          git commit -m "snapshot #${{ github.event.issue.number }} ($PROJECT_DIR)"
+          git pull --rebase
           git push
       - name: Report
         if: always()
@@ -36,5 +39,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RESULT: ${{ job.status }}
         run: |
-          gh issue comment ${{ github.event.issue.number }} --body "Snapshot: $RESULT. Cek commit terbaru atau tab Actions."
+          if [ -f /tmp/snapshot_result.txt ]; then BODY="$(cat /tmp/snapshot_result.txt)"; else BODY="Status: $RESULT. Cek tab Actions."; fi
+          gh issue comment ${{ github.event.issue.number }} --body "$BODY"
           gh issue close ${{ github.event.issue.number }}
