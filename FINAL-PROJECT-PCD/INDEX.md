@@ -1,12 +1,12 @@
 # FINAL PROJECT PCD - Sistem Skrining Awal Kesehatan Gigi Berbasis Kamera Smartphone
 
 > LLM: baca dulu `SOP.md` dan `PREFERENCES.md`:
-> - SOP: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/SOP.md
+> - SOP: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/SOP.md?v=20261114
 > - PREFERENCES: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/PREFERENCES.md
 >
 > Jika tidak bisa membuka link, minta user menempelkan isinya.
 
-Terakhir diperbarui: 2026-11-11
+Terakhir diperbarui: 2026-11-14
 
 ## Ringkasan
 - Tujuan: Mengembangkan prototipe sistem skrining awal yang menganalisis foto rongga mulut dari kamera smartphone untuk menampilkan indikasi beberapa kondisi gigi dan gusi.
