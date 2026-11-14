@@ -1,7 +1,7 @@
 # FINAL PROJECT DEEP LEARNING 
 
 > LLM: baca dulu `SOP.md` dan `PREFERENCES.md`:
-> - SOP: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/SOP.md (setelah membaca sebutkan tanggal terakhir diperbarui dari file SOP.md)
+> - SOP: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/SOP.md (setelah membaca kutip baris `Terakhir diperbarui` persis dan kalimat pertama file SOP.md)
 > - PREFERENCES: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/PREFERENCES.md
 >
 > Jika tidak bisa membuka link, minta user menempelkan isinya.
@@ -36,7 +36,7 @@ Saat ini proyek sudah resmi on going setelah judul Klasifikasi Aktivitas Manusia
 |---|---|
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/STATUS.md | perlu detail progres |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/REQUIREMENTS.md | perlu latar belakang / spesifikasi |
-| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/DECISIONS.md | akan mengusulkan perubahan arah |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/DECISION.md | akan mengusulkan perubahan arah |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/extra/proposal_feedback.md | perlu membaca feedback proposal proyek akhir dari dosen |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/extra/progress1_feedback.md | perlu membaca feedback progress update feedback minggu kedua November proyek akhir dari dosen |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/extra/progress_update_1.md | perlu membaca progress update feedback minggu kedua November versi lebih komprehensif dari progress1_feedback.md |
