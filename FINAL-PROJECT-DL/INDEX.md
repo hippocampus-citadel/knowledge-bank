@@ -1,7 +1,7 @@
 # FINAL PROJECT DEEP LEARNING 
 
 > LLM: baca dulu `SOP.md` dan `PREFERENCES.md`:
-> - SOP: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/SOP.md (setelah membaca kutip baris `Terakhir diperbarui` persis dan kalimat pertama file SOP.md)
+> - SOP: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/SOP.md?v=20261114 (setelah membaca kutip baris `Terakhir diperbarui` persis dan kalimat pertama file SOP.md)
 > - PREFERENCES: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/PREFERENCES.md
 >
 > Jika tidak bisa membuka link, minta user menempelkan isinya.
