@@ -6,7 +6,7 @@
 >
 > Jika tidak bisa membuka link, minta user menempelkan isinya.
 
-Terakhir diperbarui: 2026-14-7
+Terakhir diperbarui: 2026-11-14
 
 ## Ringkasan
 - Tujuan: Mengembangkan dan mengevaluasi model Deep Learning dari dataset UCI Human Activity Recognition sebagai proyek akhir mata kuliah Deep Learning
