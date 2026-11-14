@@ -32,6 +32,7 @@ LLM tidak bisa menulis ke repo. Saat user bilang "akhiri sesi" atau meminta hand
 
 ```
 Project: <nama-folder-project>
+Tag Akun: <tag-nama-dari-user>
 ## Snapshot — YYYY-MM-DD
 - Selesai sesi ini:
 - Sedang berjalan / terhambat:
