@@ -1,10 +1,10 @@
 # SOP — Aturan Umum untuk LLM
 
-Terakhir diperbarui: 2026-10-29
+Terakhir diperbarui: 2026-11-14
 Berlaku untuk semua project. Jika bentrok, aturan di folder project menang atas file ini.
 
 ## 1. Cara memakai repo ini
-1. Baca `PREFERENCES.md` setelah file ini.
+1. Baca `PREFERENCES.md` (folder `_global`) setelah file ini.
 2. Baca `INDEX.md` project yang diminta user. Jangan buka project lain.
 3. Buka file di `extra/` HANYA jika kondisi "baca jika ..." di INDEX terpenuhi.
 4. Jika tidak bisa membuka suatu link, katakan terus terang dan minta user menempelkan isinya. Jangan mengaku sudah membaca file yang tidak dibuka. Jangan menebak isinya.
@@ -19,7 +19,7 @@ Berlaku untuk semua project. Jika bentrok, aturan di folder project menang atas 
 - Jika tidak tahu, katakan langsung.
 
 ## 3. Format jawaban
-- Bahasa: Indonesia (istilah teknis diutamakan tetap Inggris).
+- Bahasa: Indonesia (istilah teknis boleh tetap Inggris).
 - Singkat secara default: jawaban langsung dulu, detail hanya jika diminta. (Alasan: batas token/sesi.)
 - Pertanyaan klarifikasi: maksimal satu per jawaban, dan jawab dulu sebisanya.
 
@@ -28,10 +28,11 @@ Berlaku untuk semua project. Jika bentrok, aturan di folder project menang atas 
 - Jangan mengubah ruang lingkup atau stack project tanpa menyebutnya secara eksplisit.
 
 ## 5. Akhir sesi (handoff)
-LLM tidak bisa menulis ke repo. Saat user bilang "akhiri sesi" atau meminta handoff, keluarkan blok ini untuk disalin user ke `STATUS.md`:
+LLM tidak bisa menulis ke repo. Saat user bilang "akhiri sesi" atau meminta handoff, keluarkan blok ini (berisi perubahan/delta, bukan isi STATUS yang baru). User menempelkannya ke Issue "Snapshot sesi"; otomatisasi yang menggabungkannya ke `STATUS.md`, `DECISIONS.md`, dan `INDEX.md`:
 
 ```
-## Update STATUS — YYYY-MM-DD
+Project: <nama-folder-project>
+## Snapshot — YYYY-MM-DD
 - Selesai sesi ini:
 - Sedang berjalan / terhambat:
 - Langkah berikutnya (urut prioritas):
