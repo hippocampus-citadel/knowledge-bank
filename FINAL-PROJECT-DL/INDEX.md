@@ -1,12 +1,12 @@
 # FINAL PROJECT DEEP LEARNING 
 
 > LLM: baca dulu `SOP.md` dan `PREFERENCES.md`:
-> - SOP: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/SOP.md
+> - SOP: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/SOP.md (setelah membaca sebutkan tanggal terakhir diperbarui dari file SOP.md)
 > - PREFERENCES: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/PREFERENCES.md
 >
 > Jika tidak bisa membuka link, minta user menempelkan isinya.
 
-Terakhir diperbarui: 2026-11-7
+Terakhir diperbarui: 2026-14-7
 
 ## Ringkasan
 - Tujuan: Mengembangkan dan mengevaluasi model Deep Learning dari dataset UCI Human Activity Recognition sebagai proyek akhir mata kuliah Deep Learning
@@ -38,3 +38,6 @@ Saat ini proyek sudah resmi on going setelah judul Klasifikasi Aktivitas Manusia
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/REQUIREMENTS.md | perlu latar belakang / spesifikasi |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/DECISIONS.md | akan mengusulkan perubahan arah |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/extra/proposal_feedback.md | perlu membaca feedback proposal proyek akhir dari dosen |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/extra/progress1_feedback.md | perlu membaca feedback progress update feedback minggu kedua November proyek akhir dari dosen |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-DL/extra/progress_update_1.md | perlu membaca progress update feedback minggu kedua November versi lebih komprehensif dari progress1_feedback.md |
+
