@@ -1,18 +1,12 @@
 name: Snapshot sesi
-description: Tempel snapshot akhir sesi, digabung otomatis ke repo
+description: Tempel blok snapshot dari LLM (harus memuat baris "Project:" di dalamnya)
 title: "[snapshot] "
 body:
-  - type: input
-    id: project
-    attributes:
-      label: Project
-      description: Nama folder project di root repo, mis. FINAL-PROJECT-PCD
-    validations:
-      required: true
   - type: textarea
     id: snapshot
     attributes:
       label: Snapshot
-      description: Tempel blok snapshot dari LLM
+      description: Tempel seluruh blok snapshot apa adanya
+      render: markdown
     validations:
       required: true
