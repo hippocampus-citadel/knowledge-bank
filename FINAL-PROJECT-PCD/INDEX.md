@@ -2,11 +2,11 @@
 
 > LLM: baca dulu `SOP.md` dan `PREFERENCES.md`:
 > - SOP: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/SOP.md?v=20261114
-> - PREFERENCES: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/PREFERENCES.md
+> - PREFERENCES: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/PREFERENCES.md?v=20261031
 >
 > Jika tidak bisa membuka link, minta user menempelkan isinya.
 
-Terakhir diperbarui: 2026-11-14
+Terakhir diperbarui: 2026-11-15
 
 ## Ringkasan
 - Tujuan: Mengembangkan prototipe sistem skrining awal yang menganalisis foto rongga mulut dari kamera smartphone untuk menampilkan indikasi beberapa kondisi gigi dan gusi.
@@ -15,18 +15,12 @@ Terakhir diperbarui: 2026-11-14
 - Batas Klaim: Alat ditujukan untuk skrining/edukasi awal, bukan diagnosis medis dan bukan pengganti pemeriksaan dokter gigi.
 
 ## Status saat ini
-Status proyek per 11 November 2026 melaporkan bahwa baseline raw (YOLOv8s, split v2) untuk seed 0, 1, dan 2 telah rampung dengan stabil (test single_cls mAP50 di kisaran 0,8978–0,9021; SD ≈ 0,0024), uji 164 epoch menunjukkan overfitting ringan tanpa kenaikan metrik signifikan, dan makna kelas YOLO 0/1 berhasil diverifikasi 100% sebagai karies gigi permanen (D) dan gigi susu (d) berdasarkan perbandingan berkas LabelMe. Hambatan operasional meliputi kendala Weekly Progress yang jatuh tempo, inkonsistensi folder di Google Drive akibat akun non-pemilik, serta paket Anggota B yang belum dibekukan, sehingga langkah prioritas berikutnya mencakup pembekuan paket Anggota B, penetapan metrik keputusan dan margin secara tertulis, pembersihan data sensitif, serta pengunduhan bobot best.pt ke laptop.
-
-(Detail lengkap: STATUS.md)
+Proyek telah menyelesaikan penulisan laporan eksperimen lanjutan dan PPT serta klarifikasi tiga split data, di mana `dataset_split_v2` ditetapkan untuk baseline dan ablasi. Template `preprocessing_REF_v2.ipynb` dengan kontrak SEL 1P dan pencatatan waktu per epoch telah dibuat dan diuji lokal, namun belum diverifikasi di Colab termasuk struktur zip dan format gambar. Analisis awal daftar preprocessing Anggota B mengidentifikasi kategori kecocokan, risiko inpainting specular, serta kebutuhan keputusan mengenai resize, augmentasi, dan ROI sebelum Tahap 1. Langkah prioritas saat ini meliputi *critical review* metode B, pengujian segera ref-v2 di Colab, penetapan metrik keputusan tertulis, serta pembersihan folder ganda dan pencatatan `run_meta.json` di Drive.
 
 ## Langkah berikutnya
-  1. Bekukan paket untuk B: notebook, config.json, baseline_raw_results.csv (18 baris), catatan versi, daftar gambar yang dikecualikan otomatis.
-  2. Tetapkan tertulis sebelum Tahap 1: metrik utama, kriteria "tahap berkontribusi tinggi", margin. USULAN sesi ini (belum diputuskan): metrik keputusan = val single_cls mAP50 (test hanya laporan akhir); ambang = kelipatan SD antar-seed; tambah kontrol "identity" (raw lewat jalur baca-tulis yang sama); multi-kelas deskriptif.
-  3. Perbaiki jobdesc-week-1 dan dokumen lain: split v2; makna kelas D/d dan pemetaan 0/1; jumlah benchmark 6.266; catatan M/m sebagai keterbatasan; hapus entri split v1 seed 42 beserta larangannya di STATUS.md lama (sudah usang).
-  4. Unduh best.pt seed 1 (50 epoch) dan e164 ke laptop, catat md5. Pastikan best.pt/last.pt seed 0 yang sah (md5 aa7628bb...) ada di folder Drive pemilik. Catat sambung lintas akun e164 di LOG.md pemilik.
-  5. Uji 50 vs 164 untuk kondisi terbaik menunggu Tahap 1; bagian raw sudah ada. Pilihan lebih murah sekitar 100 epoch = usulan, belum diputuskan.
-  6. SOP bagian 6: pastikan tidak ada email di notebook atau LOG.md yang masuk repo (versi lama baseline_raw_seed2.ipynb memuatnya).
-  7. Opsional (usulan): satu pasang run raw vs kondisi terbaik di split benchmark paper sebagai pembanding sekunder untuk arahan dosen.
+1. CRITICAL REVIEW metode preprocessing B (diminta user). Periksa: risiko inpainting specular menghapus lesi white spot; HE/CLAHE di kanal luminans; MSRCR banyak parameter; kontras HE/MSRCR/CLAHE = alternatif satu tahap, bukan ditumpuk; dukungan literatur (rujukan Thanh/Ding/Duong/Park belum diverifikasi); jumlah kandidat vs anggaran GPU; bahaya penyetelan parameter dari hasil val; status resize, augmentasi, ROI.
+2. Uji asap ref-v2 di Colab: PRE=[("identity",{})], cond pre_identity, epochs 2, seed 99; hapus baris seed 99 dari CSV.
+3. Tetapkan tertulis sebelum Tahap 1: metrik keputusan, kriteria "tahap berkontribusi", margin. [USULAN] val single_cls mAP50 (SD val 0,0049, n=3); test hanya laporan akhir; kontrol identity (E0b); kombinasi satu per kategori dengan urutan tetap.
 
 ## Keputusan penting (final)
 - Judul resmi project ini adalah Implementasi Teknik Pengolahan Citra Digital untuk Meningkatkan Deteksi Lesi Karies pada Foto Intraoral Remaja dan Dewasa Muda Berbasis Aplikasi Web
@@ -45,11 +39,11 @@ Status proyek per 11 November 2026 melaporkan bahwa baseline raw (YOLOv8s, split
 ## Konteks tambahan (baca HANYA jika kondisinya terpenuhi)
 | File | Baca jika... |
 |---|---|
-| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/STATUS.md | perlu detail progres |
-| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/REQUIREMENTS.md | perlu mengetahui detail spesifik ketentuan dari dosen |
-| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/DECISION.md | akan mengusulkan perubahan arah |
-| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/internal_teams_files/literature-review.md | butuh melihat hasil literature review yang telah dikumpulkan |
-| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/extras/proposal_feedback.md | butuh melihat hasil evaluasi proposal oleh dosen |
-| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/extras/log_history | perlu meninjau apa saja yang telah dilakukan di sesi sesi sebelumnya |
-| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/internal_teams_files/jobdesc-week-1.md | butuh melihat job description tim untuk weekly progress 1 |
-| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/internal_teams_files/exp-report-1.md | butuh melihat hasil eksperimen reproduksi paper rujukan dan hasil penetapan baseline ablasi yang dijelaskan secara naratif |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/STATUS.md?v=20261115 | perlu detail progres |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/REQUIREMENTS.md?v=20261031 | perlu mengetahui detail spesifik ketentuan dari dosen |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/DECISION.md?v=20261115 | akan mengusulkan perubahan arah |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/internal_teams_files/literature-review.md?v=20261031 | butuh melihat hasil literature review yang telah dikumpulkan |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/extras/proposal_feedback.md?v=20261105 | butuh melihat hasil evaluasi proposal oleh dosen |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/extras/log_history?v=20261111 | perlu meninjau apa saja yang telah dilakukan di sesi sesi sebelumnya |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/internal_teams_files/jobdesc-week-1.md?v=20261107 | butuh melihat job description tim untuk weekly progress 1 |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/internal_teams_files/exp-report-1.md?v=20261109 | butuh melihat hasil eksperimen reproduksi paper rujukan dan hasil penetapan baseline ablasi yang dijelaskan secara naratif |

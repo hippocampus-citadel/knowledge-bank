@@ -1,33 +1,40 @@
 # STATUS PROJECT
 
-> Terakhir diperbarui: 2026-11-11
+> Terakhir diperbarui: 2026-11-15
 
-**`[CLAUDE @em (2026-11-11)]`**
+**`[@w30 (2026-11-15)]`**
 
 ## Saat ini
 - Sedang berjalan / terhambat:
-  - Weekly Progress jatuh tempo 11 Nov 2026. Status paket B tidak diketahui.
-  - Hipotesis (n=1 per kondisi, belum terbukti): folder/berkas ganda di Drive muncul saat menulis lewat jalur pintasan akun non-pemilik shared folder (seed 0 dan 2 non-pemilik: s2 sempat ~28 folder, s0 61 last.pt dan 24 best.pt; seed 1 akun pemilik bersih). Patch (copy2 tanpa mkdir/os.replace) belum terbukti: isi folder weights run e164 belum dilaporkan.
-  - config.json di Drive masih ckpt_every=2, belum diedit ke 5.
-        
+  - Status Weekly Progress 11 Nov dan paket Anggota B belum diketahui.
+  - Template ref-v2 belum diuji di Colab. Struktur zip (folder images/ di level atas) dan format gambar (JPEG/PNG) belum diverifikasi.
+  - Folder/berkas ganda di Drive (seed 0 dan 2, akun non-pemilik) belum terselesaikan.
+
 ## Langkah berikutnya
 - Langkah berikutnya (urut prioritas):
-  1. Bekukan paket untuk B: notebook, config.json, baseline_raw_results.csv (18 baris), catatan versi, daftar gambar yang dikecualikan otomatis.
-  2. Tetapkan tertulis sebelum Tahap 1: metrik utama, kriteria "tahap berkontribusi tinggi", margin. USULAN sesi ini (belum diputuskan): metrik keputusan = val single_cls mAP50 (test hanya laporan akhir); ambang = kelipatan SD antar-seed; tambah kontrol "identity" (raw lewat jalur baca-tulis yang sama); multi-kelas deskriptif.
-  3. Perbaiki jobdesc-week-1 dan dokumen lain: split v2; makna kelas D/d dan pemetaan 0/1; jumlah benchmark 6.266; catatan M/m sebagai keterbatasan; hapus entri split v1 seed 42 beserta larangannya di STATUS.md lama (sudah usang).
-  4. Unduh best.pt seed 1 (50 epoch) dan e164 ke laptop, catat md5. Pastikan best.pt/last.pt seed 0 yang sah (md5 aa7628bb...) ada di folder Drive pemilik. Catat sambung lintas akun e164 di LOG.md pemilik.
-  5. Uji 50 vs 164 untuk kondisi terbaik menunggu Tahap 1; bagian raw sudah ada. Pilihan lebih murah sekitar 100 epoch = usulan, belum diputuskan.
-  6. SOP bagian 6: pastikan tidak ada email di notebook atau LOG.md yang masuk repo (versi lama baseline_raw_seed2.ipynb memuatnya).
-  7. Opsional (usulan): satu pasang run raw vs kondisi terbaik di split benchmark paper sebagai pembanding sekunder untuk arahan dosen.
+  1. CRITICAL REVIEW metode preprocessing B (diminta user). Periksa: risiko inpainting specular menghapus lesi white spot; HE/CLAHE di kanal luminans; MSRCR banyak parameter; kontras HE/MSRCR/CLAHE = alternatif satu tahap, bukan ditumpuk; dukungan literatur (rujukan Thanh/Ding/Duong/Park belum diverifikasi); jumlah kandidat vs anggaran GPU; bahaya penyetelan parameter dari hasil val; status resize, augmentasi, ROI.
+  2. Uji asap ref-v2 di Colab: PRE=[("identity",{})], cond pre_identity, epochs 2, seed 99; hapus baris seed 99 dari CSV.
+  3. Tetapkan tertulis sebelum Tahap 1: metrik keputusan, kriteria "tahap berkontribusi", margin. [USULAN] val single_cls mAP50 (SD val 0,0049, n=3); test hanya laporan akhir; kontrol identity (E0b); kombinasi satu per kategori dengan urutan tetap.
+  4. Putuskan kontrak SEL 1P untuk resize. [USULAN] longgarkan hanya untuk resize seluruh gambar.
+  5. Perbarui jobdesc-week-1 dan STATUS.md lama: tiga split, kelas D/d, 6.266 gambar.
+  6. Ganti nama/arsipkan `dataset_split` lama di Drive; pastikan run_meta.json seed 0/1/2 mencatat path split v2.
+  7. Dari status sebelumnya: unduh best.pt seed 1 dan e164, catat md5; pastikan tidak ada email di notebook/LOG.md.
 
 ## Pertanyaan terbuka
-  - Arti label M/m: tanya penulis via Zenodo atau inspeksi visual?
-  - Judul resmi menyebut "lesi karies", sedangkan anotasi paper mengelilingi gigi berkaries: judul dipertahankan atau diberi catatan?
-  - Pemicu folder ganda belum diketahui (hipotesis pintasan non-pemilik).
-  - Apakah uji kecukupan epoch pada kondisi terbaik tetap dijalankan, dan dengan margin berapa?
-  - Apakah Weekly Progress 11 Nov dan paket B sudah dikirim atau dibekukan?
-    
+- Pertanyaan terbuka:
+  - Apakah tahap yang diuji harus mengikuti daftar B seluruhnya (sekitar 7 kondisi x 3 seed, sekitar 29 jam GPU, perkiraan kasar) atau disaring dulu?
+  - Apakah ROI dipakai sebagai mask, crop, atau dikeluarkan dari Tahap 1?
+  - Apakah augmentasi menjadi eksperimen terpisah (baseline harus diulang dengan setelan sama)?
+  - Apakah dataset punya mask gigi untuk U-Net?
+
 ## Riwayat 
+- Selesai sesi ini:
+  - Laporan eksperimen lanjutan (bagian 9-16 setelah exp-report-1) dan PPT ringkasan ditulis di chat. Belum masuk repo.
+  - Klarifikasi tiga split (bukan keputusan baru): (1) split benchmark [8], bocor, hanya replikasi; (2) `dataset_split` = draf lokal awal, hanya no_retractors, untuk foto awam, tidak dipakai ablasi, diunggah ke Drive dengan nama sama; (3) `dataset_split_v2` = retraktor + no_retractors, bebas kebocoran, dipakai baseline dan ablasi.
+  - Dibuat template `preprocessing_REF_v2.ipynb`: turunan `baseline_raw_REF_v1.ipynb` + SEL 1P (fungsi tahap dengan KONTRAK TAHAP: uint8 BGR, shape sama, deterministik, fotometrik) + pencatatan waktu per epoch (`epoch_times.csv`, `<cond>_timing.csv`; permintaan dosen). Diuji lokal dengan data palsu; BELUM diuji di Colab.
+  - Manual folder bersama v2 (Claude Doc "Manual Eksperimen Folder Bersama - Final Project PCD") mencakup template baru.
+  - Daftar preprocessing Anggota B diterima (rujukan belum diverifikasi): resize; Gaussian; inpainting specular highlight (HSV + cv2.inpaint); HE/MSRCR/CLAHE; segmentasi ROI gigi (klasik atau U-Net); augmentasi flip/rotasi tanpa perubahan warna.
+  - Analisis awal daftar B: (A) cocok template: Gaussian, specular, HE, MSRCR, CLAHE, ROI varian mask; (B) geometris tapi label aman: resize (redundan dengan imgsz 640); (C) tidak cocok: augmentasi (hiperparameter training, hanya train), ROI crop (label ikut berubah), ROI U-Net (butuh mask gigi, belum tentu ada).
 
 - Selesai (sejak 2026-11-09):
   - Baseline raw, split v2, YOLOv8s, 50 epoch, Ultralytics 8.4.207, Adam, batch 32, imgsz 640, workers 1, seed 0/1/2 selesai. Test single_cls mAP50: 0,9021 | 0,9019 | 0,8978 (SD ≈ 0,0024, n=3). Test single_cls mAP50-95: 0,7208 | 0,7145 | 0,713. Val single_cls mAP50: 0,9178 | 0,9125 | 0,9081.

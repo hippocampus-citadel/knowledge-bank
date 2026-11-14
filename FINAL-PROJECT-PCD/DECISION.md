@@ -1,6 +1,10 @@
 # DECISION PROJECT
 
-> Terakhir diperbarui: 2026-11-11
+> Terakhir diperbarui: 2026-11-15
+
+## DECISION UPDATE untuk [@w30 (2026-11-15 02:00)]
+- Keputusan baru (+ alasan 1 kalimat):
+  - `preprocessing_REF_v2.ipynb` dipakai sebagai template eksperimen preprocessing, `baseline_raw_REF_v1.ipynb` tetap untuk baseline; alasan: preprocessing dan pencatatan waktu (permintaan dosen) belum didukung REF_v1.
 
 ## DECISION UPDATE untuk [CLAUDE em***********nt (2026-11-11 18:30)]
 - Keputusan baru (+ alasan 1 kalimat):
