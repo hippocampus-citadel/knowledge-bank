@@ -2,6 +2,14 @@
 
 > Terakhir diperbarui: 2026-11-15
 
+## DECISION UPDATE untuk [@w30 (2026-11-15 12:08)]
+- Keputusan baru (+ alasan 1 kalimat):
+  - [Wafi] Audit manual dilewati dan metrik otomatis dipercaya, karena foto tampak normal baginya.
+  - [Wafi] Klaim dibatasi pada dataset yang dipakai (satu perangkat, pencahayaan tertentu), dengan quality gate sebagai mitigasi, karena kondisi HP lapangan tidak terwakili.
+  - [Claude, dinyatakan pasti] Kontrol identity (E0b) wajib, karena tanpa kontrol efek tiap tahap tidak terukur.
+  - [USULAN Claude, BELUM disetujui] Kandidat: CLAHE di kanal luminans; specular hanya komponen kecil (<0,5% luas gambar, ambang belum dikalibrasi). Metrik val single_cls mAP50, margin +0,01 (~2 SD 0,0049; angka usulan, bukan baku), 3 seed, test sekali untuk finalis. Uji ketahanan: degradasi sintetis (blur, kurang cahaya) 3 tingkat, hanya val, evaluasi best.pt baseline tanpa retrain; waspadai sirkularitas CLAHE vs kontras rendah linear.
+  - [USULAN Claude, BELUM disetujui] Ditolak: Gaussian (derau rendah); HE dan MSRCR (cukup satu tahap kontras); resize offline (YOLO sudah menyeragamkan); augmentasi (hiperparameter training, eksperimen terpisah, baseline diulang); ROI crop dan U-Net (mask gigi belum tentu ada); specular gumpalan besar (piksel jenuh tidak menyimpan informasi).
+
 ## DECISION UPDATE untuk [@w30 (2026-11-15 02:00)]
 - Keputusan baru (+ alasan 1 kalimat):
   - `preprocessing_REF_v2.ipynb` dipakai sebagai template eksperimen preprocessing, `baseline_raw_REF_v1.ipynb` tetap untuk baseline; alasan: preprocessing dan pencatatan waktu (permintaan dosen) belum didukung REF_v1.

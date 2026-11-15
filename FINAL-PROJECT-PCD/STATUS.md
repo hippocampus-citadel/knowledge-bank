@@ -6,28 +6,34 @@
 
 ## Saat ini
 - Sedang berjalan / terhambat:
-  - Status Weekly Progress 11 Nov dan paket Anggota B belum diketahui.
-  - Template ref-v2 belum diuji di Colab. Struktur zip (folder images/ di level atas) dan format gambar (JPEG/PNG) belum diverifikasi.
-  - Folder/berkas ganda di Drive (seed 0 dan 2, akun non-pemilik) belum terselesaikan.
+  - preprocessing_REF_v2.ipynb belum diuji di Colab (struktur zip: images/ dan labels/ ditemukan lewat SEL 2 audit; format JPEG/PNG tercetak di SEL 2, catat hasilnya).
+  - Jumlah gambar tidak konsisten: paper 6.313, STATUS 6.266, zip v2 5.505; asal selisih belum diverifikasi.
+  - Duong/Park belum terverifikasi; status Weekly Progress 11 Nov dan paket Anggota B tetap tidak diketahui.
 
 ## Langkah berikutnya
 - Langkah berikutnya (urut prioritas):
-  1. CRITICAL REVIEW metode preprocessing B (diminta user). Periksa: risiko inpainting specular menghapus lesi white spot; HE/CLAHE di kanal luminans; MSRCR banyak parameter; kontras HE/MSRCR/CLAHE = alternatif satu tahap, bukan ditumpuk; dukungan literatur (rujukan Thanh/Ding/Duong/Park belum diverifikasi); jumlah kandidat vs anggaran GPU; bahaya penyetelan parameter dari hasil val; status resize, augmentasi, ROI.
+  1. Wafi menyetujui atau mengubah usulan di bawah.
   2. Uji asap ref-v2 di Colab: PRE=[("identity",{})], cond pre_identity, epochs 2, seed 99; hapus baris seed 99 dari CSV.
-  3. Tetapkan tertulis sebelum Tahap 1: metrik keputusan, kriteria "tahap berkontribusi", margin. [USULAN] val single_cls mAP50 (SD val 0,0049, n=3); test hanya laporan akhir; kontrol identity (E0b); kombinasi satu per kategori dengan urutan tetap.
-  4. Putuskan kontrak SEL 1P untuk resize. [USULAN] longgarkan hanya untuk resize seluruh gambar.
-  5. Perbarui jobdesc-week-1 dan STATUS.md lama: tiga split, kelas D/d, 6.266 gambar.
-  6. Ganti nama/arsipkan `dataset_split` lama di Drive; pastikan run_meta.json seed 0/1/2 mencatat path split v2.
-  7. Dari status sebelumnya: unduh best.pt seed 1 dan e164, catat md5; pastikan tidak ada email di notebook/LOG.md.
+  3. Tetapkan TERTULIS sebelum Tahap 1: metrik, margin, aturan keputusan, parameter dikunci.
+  4. Tulis fungsi CLAHE dan specular-kecil sesuai kontrak SEL 1P (uint8 BGR, shape sama, deterministik, fotometrik). Butuh teks kontrak dari preprocessing_REF_v2.ipynb.
+  5. Jalankan 3 kondisi x 3 seed (sekitar 9 run, perkiraan kasar).
+  6. Uji ketahanan degradasi sintetis (butuh isi dataset_split_v2/data.yaml).
+  7. Perbarui STATUS: angka 6.266 gambar, tiga split.
 
 ## Pertanyaan terbuka
 - Pertanyaan terbuka:
-  - Apakah tahap yang diuji harus mengikuti daftar B seluruhnya (sekitar 7 kondisi x 3 seed, sekitar 29 jam GPU, perkiraan kasar) atau disaring dulu?
-  - Apakah ROI dipakai sebagai mask, crop, atau dikeluarkan dari Tahap 1?
-  - Apakah augmentasi menjadi eksperimen terpisah (baseline harus diulang dengan setelan sama)?
-  - Apakah dataset punya mask gigi untuk U-Net?
+  - Subset mana (retractors atau no_retractors) yang mewakili foto awam untuk klaim laporan?
+  - Pencahayaan dataset (flash HP atau lampu periksa): cek bagian Methods Ahmed dkk. 2025, Sci Data (perlu verifikasi).
+  - Dari mana selisih 6.313 / 6.266 / 5.505 gambar?
+  - Apakah dataset punya mask gigi (untuk U-Net)?
+  - Apakah Wafi menyetujui seluruh usulan di atas?
 
 ## Riwayat 
+- Selesai sesi ini:
+  - Critical review daftar preprocessing Anggota B. Rujukan yang SUDAH diverifikasi: Thanh 2022 (teks penuh: 600x600, Gaussian tanpa parameter kernel, flip+rotasi tanpa warna; specular hanya dilaporkan sebagai false positive refleksi cahaya, inpainting BUKAN dari makalah) dan Ding 2021 (MSRCR dipakai, tetapi kenaikan mAP terkonfound jumlah data 3.990 -> 7.980 pada kelompok gabungan; test hanya 70 pasien). Duong dan Park BELUM terverifikasi (hanya abstrak Duong terbaca).
+  - Notebook audit_degradasi.ipynb (diuji data palsu, lalu dijalankan Wafi di Colab pada dataset_split_v2 subset train saja, 1.500 gambar). Keluaran di Drive: final_project_pcd/audit_degradasi/ (metrics_train.csv, ekstrem_list.csv, sheets/). Hasil: derau rendah (noise_sigma median ~0,5 dari skala 0-255); kontras global cukup (frac_dark median <1%, dyn_range ~190); frac_spec median 2,2% (retractors) vs 0,9% (no_retractors); resolusi 490x870 s.d. 2.000x2.700. 947 dari 1.500 gambar tanpa berkas label = negatif sah (zip berisi 1.957 label dari 5.505 gambar, proporsi cocok).
+  - Specular (aturan HSV V>=240 dan S<=40, ambang awal belum dikalibrasi): komponen besar (>0,5% luas gambar) mendominasi (median frac_big 0 pada no_retractors, 0,31 pada retractors; 300 gambar). Pengamatan visual Wafi: titik kecil = pantulan sungguhan; gumpalan besar menutup hampir satu mahkota, berhenti dekat gusi/batas gigi, hanya pada tampak lateral. EXIF dataset kosong, sehingga hipotesis flash tidak bisa diuji.
+
 - Selesai sesi ini:
   - Laporan eksperimen lanjutan (bagian 9-16 setelah exp-report-1) dan PPT ringkasan ditulis di chat. Belum masuk repo.
   - Klarifikasi tiga split (bukan keputusan baru): (1) split benchmark [8], bocor, hanya replikasi; (2) `dataset_split` = draf lokal awal, hanya no_retractors, untuk foto awam, tidak dipakai ablasi, diunggah ke Drive dengan nama sama; (3) `dataset_split_v2` = retraktor + no_retractors, bebas kebocoran, dipakai baseline dan ablasi.

@@ -18,9 +18,9 @@ Terakhir diperbarui: 2026-11-15
 Proyek telah menyelesaikan penulisan laporan eksperimen lanjutan dan PPT serta klarifikasi tiga split data, di mana `dataset_split_v2` ditetapkan untuk baseline dan ablasi. Template `preprocessing_REF_v2.ipynb` dengan kontrak SEL 1P dan pencatatan waktu per epoch telah dibuat dan diuji lokal, namun belum diverifikasi di Colab termasuk struktur zip dan format gambar. Analisis awal daftar preprocessing Anggota B mengidentifikasi kategori kecocokan, risiko inpainting specular, serta kebutuhan keputusan mengenai resize, augmentasi, dan ROI sebelum Tahap 1. Langkah prioritas saat ini meliputi *critical review* metode B, pengujian segera ref-v2 di Colab, penetapan metrik keputusan tertulis, serta pembersihan folder ganda dan pencatatan `run_meta.json` di Drive.
 
 ## Langkah berikutnya
-1. CRITICAL REVIEW metode preprocessing B (diminta user). Periksa: risiko inpainting specular menghapus lesi white spot; HE/CLAHE di kanal luminans; MSRCR banyak parameter; kontras HE/MSRCR/CLAHE = alternatif satu tahap, bukan ditumpuk; dukungan literatur (rujukan Thanh/Ding/Duong/Park belum diverifikasi); jumlah kandidat vs anggaran GPU; bahaya penyetelan parameter dari hasil val; status resize, augmentasi, ROI.
+1. Wafi menyetujui atau mengubah usulan di bawah.
 2. Uji asap ref-v2 di Colab: PRE=[("identity",{})], cond pre_identity, epochs 2, seed 99; hapus baris seed 99 dari CSV.
-3. Tetapkan tertulis sebelum Tahap 1: metrik keputusan, kriteria "tahap berkontribusi", margin. [USULAN] val single_cls mAP50 (SD val 0,0049, n=3); test hanya laporan akhir; kontrol identity (E0b); kombinasi satu per kategori dengan urutan tetap.
+3. Tetapkan TERTULIS sebelum Tahap 1: metrik, margin, aturan keputusan, parameter dikunci.
 
 ## Keputusan penting (final)
 - Judul resmi project ini adalah Implementasi Teknik Pengolahan Citra Digital untuk Meningkatkan Deteksi Lesi Karies pada Foto Intraoral Remaja dan Dewasa Muda Berbasis Aplikasi Web
