@@ -1,38 +1,50 @@
 # STATUS PROJECT
 
-> Terakhir diperbarui: 2026-11-14
+> Terakhir diperbarui: 2026-11-15
 
-**`[CLAUDE @em (2026-11-14)]`**
+**`[CLAUDE @em (2026-11-15)]`**
 
 ## Saat ini
-- Proyek berada di tahap eksperimen model. Weekly Progress Report #1 (periode 7–12 November 2026) sudah dikumpulkan dan dibahas dengan dosen. Baru ANN baseline dan LSTM v1 yang punya hasil, hanya pada validation. Test set belum dipakai (FINAL=False).
-- Hasil sementara (rata-rata ± SD, 5 seed, validation): ANN akurasi 0,9394 ± 0,0042 dan macro-F1 0,9389 ± 0,0046 (328.838 parameter); LSTM v1 akurasi 0,9661 ± 0,0132 dan macro-F1 0,9669 ± 0,0129 (±19.334 parameter). LSTM belum bisa disimpulkan lebih baik karena SD antar-seed sekitar tiga kali lebih besar.
-- Kesalahan dominan: STANDING→SITTING pada peserta 25 (37 window di setiap seed ANN; LSTM 17, 0, 20, 37, 37). Karena window overlap 50%, jumlah ini setara ±19 window independen. Penyebab fisiknya belum bisa dipastikan dari data.
-- Belum dijalankan: GRU, BiLSTM, CNN 1D, CNN-LSTM, LSTM v2, ANN pada 561 fitur, dan EDA v2. Rumusan masalah dan referensi proposal (diminta dosen) belum dilengkapi.
-- Dataset v2 (`har_clean_v2.npz`, meta, g, idx) sudah dipakai di semua hasil, tetapi lokasi filenya belum diseragamkan agar bisa dimuat `common.py` oleh semua anggota tim.
-- Catatan teknis: pengaturan training dikunci lewat `common.py` (Adam lr 1e-3, batch 64, maksimal 100 epoch, early stopping patience 10 pada validation loss, 5 seed). Semua seed berhenti di epoch 12–13.
+- Sedang berjalan / terhambat:
+  - Belum ada eksperimen baru (GroupKFold, ANN 561 fitur, GRU, dst.).
+  - INDEX.md masih usang: status, langkah berikutnya, tanggal "2026-14-7" tidak valid, DECISIONS.md vs DECISION.md.
+  - Tabel literatur belum ditulis.
+  - Belum diperiksa: kode Vazan; paper asli Mutegeki & Han (92%, hanya abstrak).
 
 ## Langkah berikutnya
-1. Cari paper rujukan sebagai pembanding, lalu lengkapi proposal dengan rumusan masalah dan referensi (permintaan dosen).
-2. Seragamkan lokasi dataset v2 untuk seluruh anggota tim.
-3. Jalankan EDA v2 dengan split validation peserta [1, 25, 27]; EDA lama (4 peserta) tidak boleh dipakai di laporan final.
-4. Putuskan skema validasi dengan GroupKFold (jumlah fold dan ukuran validation), dengan syarat keenam kelas terwakili di setiap fold validasi.
-5. Konfirmasi apakah ke-30 peserta menjalankan keenam aktivitas.
-6. Jalankan ANN pada 561 fitur, lalu GRU, BiLSTM, CNN 1D, dan CNN-LSTM; catat waktu training untuk setiap eksperimen.
-7. Uji dampak tanpa early stopping patience 10 terhadap overfitting.
-8. Jalankan LSTM v2 (mis. 128 unit) dengan pengaturan training yang sama.
-9. Analisis error lintas model memakai prediksi per window dan ID peserta.
-10. Pilih konfigurasi final tiap model, lalu jalankan FINAL=True sekali per model.
+- Langkah berikutnya (urut prioritas):
+  1. Tulis tabel literatur (kolom: split, input, konfigurasi dipilih dengan apa, metrik, status) dan lengkapi proposal (rumusan masalah + referensi).
+  2. Perbaiki INDEX.md.
+  3. Seragamkan lokasi dataset v2, lalu jalankan EDA v2.
+  4. Putuskan skema GroupKFold (jumlah fold, keterwakilan kelas) dan verifikasi bahwa 30 peserta melakukan 6 aktivitas.
+  5. Jalankan ANN 561 fitur (bandingkan Anguita) dan GRU (bandingkan baseline GRU 96,40). Lanjut ke model lain dan catat waktu training.
+  6. Uji dampak early stopping patience 10.
+  7. FINAL=True sekali per model; bandingkan ke literatur hanya pada test resmi.
 
 ## Pertanyaan terbuka
-- Berapa fold GroupKFold yang dipakai? Tim sempat bertanya apakah hasilnya 7 fold (21 peserta train resmi ÷ 3 peserta per fold; hitungan ini perlu dikonfirmasi). Dosen menyatakan perubahan proporsi split (mis. validation 5 peserta) harus berdasarkan keterwakilan kelas, bukan proporsi angka.
-- Apakah ke-30 peserta lengkap melakukan keenam aktivitas? Perlu diverifikasi dari data.
-- Mengapa semua seed berhenti di epoch 12–13, dan seberapa parah overfitting tanpa patience 10? Belum dicoba.
-- Apa penyebab fisik error STANDING→SITTING pada peserta 25 (mis. posisi ponsel)?
-- Apakah variasi antar-seed LSTM mengecil pada konfigurasi lain (LSTM v2) atau model pembanding?
-- Paper rujukan apa yang relevan? Perlu dicari dan diverifikasi, jangan dikarang.
+- Pertanyaan terbuka:
+  - Jumlah fold GroupKFold dan ukuran validation (7 fold = 21 ÷ 3 baru hitungan, perlu konfirmasi).
+  - Apakah dosen menerima 3 pembanding dan label "tidak sebanding"?
+  - DOI nomor 4 user (`cicn67655…`) belum ditemukan; file yang diunggah adalah paper ICSESS.
+  - Vazan: apakah LDA di-fit hanya pada train, dan apakah ModelCheckpoint dipantau pada test? (perlu cek kode GitHub-nya)
+  - Mutegeki & Han: protokol asli belum dibaca.
 
 ## Riwayat 
+- Selesai sesi ini:
+  - STATUS.md dan DECISION.md lama ternyata berisi proyek BirdSet, bukan HAR. Draf pengganti sudah disusun di chat.
+  - Riset pembanding literatur. Dibaca penuh:
+    - Anguita 2013: 96%, SVM + 561 fitur, test resmi 2.947.
+    - TCN-GRU (PLoS ONE 2024): 97,25%, baseline GRU 96,40%, test resmi 21/9, sinyal mentah.
+    - MSTCN (F1000 2022): 97,42%, grup penulis sama dengan TCN-GRU.
+    - Xia (IEEE Access 2020): akurasi 95,80%, F1 95,78%, split per peserta 22/8.
+    - MDPI 2026: ≈95%, 30× split per peserta, 561 fitur.
+  - Dinilai tidak sebanding:
+    - Kim et al.: SMOTE dijalankan sebelum split acak.
+    - Springer IJCIS 2026: confusion matrix berjumlah 736, sedangkan test resmi 2.947.
+    - Ankita 2021: diagonal confusion matrix 2.708/2.947 ≈ 91,9%, bukan 97,89%.
+    - Vazan (preprint): dicurigai bocor, kode belum diperiksa.
+    - Mekruksavanich ICSESS: memakai MotionSense.
+
 - Selesai sesi ini (periode 7–12 November 2026):
   - Validation dipisah per peserta [1, 25, 27]: 1.132 window (15,4% dari 7.352 window train resmi). Train menjadi 6.220 window (18 peserta); test resmi 2.947 window (9 peserta). Pembagian dari total 10.299 window adalah 60,4% / 11,0% / 28,6%, bukan 70/15/15 seperti di diagram proposal (koreksi dari dosen).
   - Inertial Signals dimuat sebagai tensor (N, 128, 9), tanpa NaN, dinormalisasi z-score per channel dengan statistik train saja, dan disimpan dalam satu file .npz yang sama untuk semua eksperimen.

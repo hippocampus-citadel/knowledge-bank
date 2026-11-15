@@ -1,6 +1,15 @@
 # DECISION PROJECT
 
-> Terakhir diperbarui: 2026-11-14
+> Terakhir diperbarui: 2026-11-15
+
+## DECISION UPDATE untuk [CLAUDE @em (2026-11-15 18:09)]
+- Keputusan baru (+ alasan 1 kalimat):
+  - Pembanding literatur ada 3. Anguita untuk ANN 561 fitur (head-to-head). TCN-GRU untuk model sekuens (head-to-head hanya baseline GRU; 97,25% dianggap batas atas optimistis). Xia hanya untuk rentang (split 22/8 berbeda, bukan head-to-head). Alasan: hanya sumber ini yang protokolnya jelas dan dibaca penuh.
+  - MSTCN tidak dihitung terpisah dari TCN-GRU. Alasan: grup penulis dan protokolnya sama, jadi bukan konfirmasi independen.
+  - Kim, Springer, Ankita, Vazan (sementara), dan Mekruksavanich dicantumkan sebagai "tidak sebanding" beserta alasan. Alasan: menunjukkan evaluasi kritis sumber.
+  - Angka >97% tidak dijadikan target, dan selisih lintas paper di bawah ±1–2 poin tidak ditafsirkan. Alasan: variasi antar-split sebesar itu.
+  - Konfigurasi model dipilih lewat validasi per peserta, bukan test. Alasan: paper pembanding kemungkinan memilih konfigurasi lewat test sehingga optimistis.
+  - Laporkan akurasi dan macro-F1. Alasan: paper pembanding melaporkan akurasi dan F1.
 
 ## DECISION UPDATE
 - Validation dipisah per peserta, bukan diacak per window, dan dikunci pada peserta [1, 25, 27] (1.132 window, 15,4% dari train resmi) untuk semua eksperimen. Alasan: window overlap 50%, sehingga pemisahan acak menimbulkan kebocoran data (arahan dosen). Perubahan ukuran atau komposisi validation hanya boleh berdasarkan keterwakilan keenam kelas, bukan proporsi angka.
