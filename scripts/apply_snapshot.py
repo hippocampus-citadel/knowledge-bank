@@ -1,5 +1,5 @@
 """Terapkan snapshot akhir sesi ke folder project. Tanpa LLM: murni aturan (deterministik)."""
-import os, re, sys, json, subprocess, pathlib, datetime, textwrap, urllib.parse, urllib.request
+import os, re, sys, json, time, subprocess, pathlib, datetime, textwrap, urllib.parse, urllib.request, urllib.error
 
 # ---- Konfigurasi ----------------------------------------------------------
 V_FMT = "%Y%m%d"      # format tag ?v=. Pakai "%Y%m%d%H%M" jika bisa update >1x/hari (hindari cache)
@@ -114,27 +114,54 @@ def top_steps(lines, n):
     return "\n".join("\n".join(it) for it in items[:n])
 
 def llm_summary(context):
-    """Opsional. Hanya untuk 'Status saat ini' di INDEX. Gagal = None (tidak menggagalkan apa pun)."""
+    """Opsional, hanya untuk 'Status saat ini' di INDEX. Return (teks, alasan_gagal)."""
     key, model = os.environ.get("OPENROUTER_API_KEY"), os.environ.get("MODEL")
     if not key or not model:
-        return None
-    system = ("Tulis ringkasan status project 2-4 kalimat dalam bahasa Indonesia, ringkas dan faktual, "
-              "hanya dari teks yang diberikan. Jangan mengarang dan jangan menambah angka. "
+        return None, "OPENROUTER_API_KEY/MODEL belum diisi"
+    system = ("Tulis ringkasan status project 2-4 kalimat (maksimal 600 karakter) dalam bahasa Indonesia, "
+              "ringkas dan faktual, hanya dari teks yang diberikan. Jangan mengarang dan jangan menambah angka. "
               "Keluarkan hanya satu paragraf, tanpa pembuka dan tanpa daftar.")
-    req = urllib.request.Request(
-        LLM_URL,
-        data=json.dumps({"model": model, "temperature": 0.1,
-                         "messages": [{"role": "system", "content": system},
-                                      {"role": "user", "content": context}]}).encode(),
-        headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
-    try:
-        with urllib.request.urlopen(req, timeout=120) as r:
-            out = json.load(r)["choices"][0]["message"]["content"].strip()
-    except Exception as e:
-        print("Ringkasan LLM gagal:", e, file=sys.stderr)
-        return None
-    out = re.sub(r"\s*\n\s*", " ", out)
-    return out if 40 <= len(out) <= 900 else None
+    payload = json.dumps({"model": model, "temperature": 0.1,
+                          "messages": [{"role": "system", "content": system},
+                                       {"role": "user", "content": context}]}).encode()
+    why = "tidak diketahui"
+    for attempt in range(2):  # coba maksimal 2x (model gratis sering kena rate limit)
+        req = urllib.request.Request(LLM_URL, data=payload, headers={
+            "Authorization": "Bearer " + key, "Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=120) as r:
+                data = json.load(r)
+            out = (data["choices"][0]["message"].get("content") or "").strip()
+        except Exception as e:
+            why = f"{type(e).__name__}: {e}"
+            if isinstance(e, urllib.error.HTTPError):
+                try:
+                    why += " " + e.read().decode()[:120]
+                except Exception:
+                    pass
+            why = why[:200]
+        else:
+            out = re.sub(r"\s*\n\s*", " ", out)
+            if 40 <= len(out) <= 1200:
+                return out, ""
+            why = f"keluaran model {len(out)} karakter (di luar 40-1200)"
+        print("Ringkasan LLM gagal:", why, file=sys.stderr)
+        if attempt == 0:
+            time.sleep(3)
+    return None, why
+
+def fallback_summary():
+    """Cadangan tanpa LLM: salin 'Sedang berjalan' dari snapshot (dipendekkan)."""
+    if "saat_ini" not in blocks:
+        return ""
+    first, rest = blocks["saat_ini"][0], blocks["saat_ini"][1:]
+    after = first.split(":", 1)[1].strip() if ":" in first else ""
+    txt = textwrap.dedent("\n".join(rest))
+    txt = re.sub(r"(?m)^\s*[-*]\s+", "", txt)
+    txt = re.sub(r"\s*\n\s*", " ", (after + " " + txt)).strip()
+    if len(txt) > 450:
+        txt = txt[:450].rsplit(" ", 1)[0] + " …"
+    return f"_(Otomatis dari snapshot, tanpa LLM)_ {txt}" if txt else ""
 
 def git_date(path):
     r = subprocess.run(["git", "log", "-1", "--format=%ct", "--", path], capture_output=True, text=True)
@@ -173,8 +200,11 @@ if "ringkasan" in blocks:
     src = "dari snapshot"
 elif any(k in blocks for k in ("saat_ini", "langkah", "riwayat", "keputusan")):
     ctx = "\n\n".join(btxt(k) for k in ("riwayat", "saat_ini", "langkah", "keputusan", "pertanyaan") if k in blocks)
-    txt = llm_summary(ctx[:6000]) or ""
+    txt, why = llm_summary(ctx[:6000])
     src = "dibuat LLM"
+    if not txt:
+        notes.append(f"ringkasan LLM gagal ({why}); memakai cadangan dari snapshot")
+        txt, src = fallback_summary(), "cadangan tanpa LLM"
 if txt:
     i = set_section(i, "Status saat ini", txt)
     applied.append(f"INDEX/Status saat ini ({src})")
