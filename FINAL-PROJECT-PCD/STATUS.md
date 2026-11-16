@@ -1,34 +1,49 @@
 # STATUS PROJECT
 
-> Terakhir diperbarui: 2026-11-15
+> Terakhir diperbarui: 2026-11-16
 
-**`[@w30 (2026-11-15)]`**
+**`[CLAUDE @w30 (2026-11-16)]`**
 
 ## Saat ini
 - Sedang berjalan / terhambat:
-  - preprocessing_REF_v2.ipynb belum diuji di Colab (struktur zip: images/ dan labels/ ditemukan lewat SEL 2 audit; format JPEG/PNG tercetak di SEL 2, catat hasilnya).
-  - Jumlah gambar tidak konsisten: paper 6.313, STATUS 6.266, zip v2 5.505; asal selisih belum diverifikasi.
-  - Duong/Park belum terverifikasi; status Weekly Progress 11 Nov dan paket Anggota B tetap tidak diketahui.
+  - E0b seed 2 belum jalan: T4 akun-1 sedang kena batas pemakaian. Opsi: tunggu limit pulih, atau jalankan di akun lain (notebook salinan baru + runtime baru; satu akun per seed; ACCOUNT berupa label, bukan email).
+  - E1, E2, E3 belum dijalankan. Di BLOK DIISI SEL 1P baru ada fungsi identity dan clahe; fungsi specular belum ditulis.
+  - Belum dikonfirmasi: (a) baris seed 99 sudah dihapus dari pre_identity_results.csv (6 baris) dan pre_identity_timing.csv (1 baris); (b) md5 best.pt seed 0 dan 1 sudah dicatat dan best.pt sudah diunduh ke laptop.
 
 ## Langkah berikutnya
 - Langkah berikutnya (urut prioritas):
-  1. Wafi menyetujui atau mengubah usulan di bawah.
-  2. Uji asap ref-v2 di Colab: PRE=[("identity",{})], cond pre_identity, epochs 2, seed 99; hapus baris seed 99 dari CSV.
-  3. Tetapkan TERTULIS sebelum Tahap 1: metrik, margin, aturan keputusan, parameter dikunci.
-  4. Tulis fungsi CLAHE dan specular-kecil sesuai kontrak SEL 1P (uint8 BGR, shape sama, deterministik, fotometrik). Butuh teks kontrak dari preprocessing_REF_v2.ipynb.
-  5. Jalankan 3 kondisi x 3 seed (sekitar 9 run, perkiraan kasar).
-  6. Uji ketahanan degradasi sintetis (butuh isi dataset_split_v2/data.yaml).
-  7. Perbarui STATUS: angka 6.266 gambar, tiga split.
+  1. Pastikan baris seed 99 sudah terhapus dari kedua CSV. Kalau belum, hapus sekarang, karena ikut menggeser statistik E0b.
+  2. Jalankan E0b seed 2 (SEED=2, EXP={"cond":"pre_identity"}, PRE=[("identity",{})]); urutan sel: SEL 0, SEL 1, SEL 1P, sel bobot awal, SEL 2, SEL 3.
+  3. Hitung rata-rata dan SD E0b dari 3 seed (val single_cls mAP50). Angka ini menjadi pembanding resmi E1/E2/E3. Jangan memakai baseline raw sebagai pembanding utama.
+  4. Jalankan `import albumentations; print(albumentations.__version__)` di tiap akun penjalan, lalu bandingkan baris log albumentations antara run baseline dan E0b.
+  5. Delegasikan E1 (CLAHE) ke anggota tim: kanal L di LAB, clip 2,0, tile 8x8, 3 seed. Parameter sudah dikunci, jangan disetel dari hasil val.
+  6. Sebelum training E2 (inpainting specular kecil), selesaikan cek keamanan: hitung tumpang tindih komponen specular dengan kotak label karies di train, lalu periksa 30 sampel secara visual. Batalkan E2 jika tumpang tindih besar. Jalankan E3 (E1+E2) hanya setelah cek E2 selesai.
+  7. Tulis tertulis sebelum Tahap 1: metrik, margin, aturan keputusan, parameter terkunci.
 
 ## Pertanyaan terbuka
 - Pertanyaan terbuka:
-  - Subset mana (retractors atau no_retractors) yang mewakili foto awam untuk klaim laporan?
-  - Pencahayaan dataset (flash HP atau lampu periksa): cek bagian Methods Ahmed dkk. 2025, Sci Data (perlu verifikasi).
-  - Dari mana selisih 6.313 / 6.266 / 5.505 gambar?
-  - Apakah dataset punya mask gigi (untuk U-Net)?
-  - Apakah Wafi menyetujui seluruh usulan di atas?
+  - Apakah pemilik template mau memperbaiki bug baris epoch ekstra, dan apa penyebab pastinya (belum dibuktikan dari kode)?
+  - Format gambar val/test: apakah semuanya .jpg?
+  - Versi albumentations di tiap akun (tidak dikunci di config.json); apakah sama?
+  - Anggaran GPU: dengan sekitar 2 jam per run, 12 run (4 kondisi x 3 seed) kira-kira 24 jam, bukan 17 jam (ekstrapolasi dari seed 0 dan 1). Cukup atau perlu dikurangi?
+  - Apakah dataset punya mask gigi? Cek nilai label dan shape_type di berkas JSON LabelMe. Status ROI klasik (varian mask) belum diputuskan.
+  - Parameter specular (ambang HSV, batas 0,5%) belum dikalibrasi; siapa yang mengunci?
+  - Pembagian E1 dan E2 ke anggota tim, dan siapa yang menyetujui hasil cek keamanan E2?
+  - REQUIREMENTS.md tidak mencantumkan bobot persentase per kriteria. Apakah dosen bisa dikonfirmasi bahwa daftar pipeline hanya contoh?
 
 ## Riwayat 
+- Selesai sesi ini:
+  - Notebook preprocessing_REF_v2.ipynb dan manual (Claude Doc "Manual Eksperimen Folder Bersama") sudah dibaca. Seed baseline = 0, 1, 2.
+  - Smoke test ref-v2 di Colab lolos (akun-1, T4, SEED 99, 2 epoch, cond pre_identity): bootstrap, SEL 1P (5.505 gambar, 117 dtk), training, backup Drive, dan SEL 3 berjalan tanpa error.
+  - Format gambar: train semuanya .jpg (3.859 berkas; val/test belum dicek). SEL 1P menulis ulang JPEG kualitas 100, sehingga piksel tidak identik dengan aslinya.
+  - E0b (cond pre_identity, PRE=[("identity",{})]) selesai untuk seed 0 dan seed 1. Pembanding baseline raw, single_cls=True, subset=all:
+    seed 0: val mAP50 0,9191 vs 0,9178; val mAP50-95 0,7229 vs 0,7214; test mAP50 0,9036 vs 0,9021.
+    seed 1: val mAP50 0,9142 vs 0,9125; val mAP50-95 0,7199 vs 0,7183; test mAP50 0,8978 vs 0,9019.
+    Selisih val < 0,002, jauh di bawah SD val baseline (0,0049) dan margin keputusan (0,01). Sanity check template v2 lolos untuk 2 dari 3 seed.
+  - Waktu (GPU Tesla T4): train_seconds seed 0 = 6670,2 dtk (130,79 dtk/epoch); seed 1 = 6976,0 dtk (136,78 dtk/epoch). Smoke test: 144 dtk/epoch. Satu run kira-kira 2 jam termasuk preprocessing dan evaluasi.
+  - Temuan bug kecil di template: epoch_times.csv selalu memuat 1 baris ekstra (epoch N+1, sekitar 17 dtk, diduga dari validasi final Ultralytics; dugaan dari pola waktu, belum dibuktikan dari kode). Akibatnya muncul peringatan "epoch tercatat 51 != EPOCHS 50" dan train_seconds lebih besar sekitar 17 dtk. Ini perilaku normal: epochs_logged = EPOCHS + 1.
+  - Log "albumentations: Blur, MedianBlur, ToGray, CLAHE (p=0,01)" muncul otomatis di run training. Ini augmentasi bawaan Ultralytics, hanya pada train, dan tidak dimatikan.
+
 - Selesai sesi ini:
   - Critical review daftar preprocessing Anggota B. Rujukan yang SUDAH diverifikasi: Thanh 2022 (teks penuh: 600x600, Gaussian tanpa parameter kernel, flip+rotasi tanpa warna; specular hanya dilaporkan sebagai false positive refleksi cahaya, inpainting BUKAN dari makalah) dan Ding 2021 (MSRCR dipakai, tetapi kenaikan mAP terkonfound jumlah data 3.990 -> 7.980 pada kelompok gabungan; test hanya 70 pasien). Duong dan Park BELUM terverifikasi (hanya abstrak Duong terbaca).
   - Notebook audit_degradasi.ipynb (diuji data palsu, lalu dijalankan Wafi di Colab pada dataset_split_v2 subset train saja, 1.500 gambar). Keluaran di Drive: final_project_pcd/audit_degradasi/ (metrics_train.csv, ekstrem_list.csv, sheets/). Hasil: derau rendah (noise_sigma median ~0,5 dari skala 0-255); kontras global cukup (frac_dark median <1%, dyn_range ~190); frac_spec median 2,2% (retractors) vs 0,9% (no_retractors); resolusi 490x870 s.d. 2.000x2.700. 947 dari 1.500 gambar tanpa berkas label = negatif sah (zip berisi 1.957 label dari 5.505 gambar, proporsi cocok).

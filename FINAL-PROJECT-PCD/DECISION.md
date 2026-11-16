@@ -1,6 +1,13 @@
 # DECISION PROJECT
 
-> Terakhir diperbarui: 2026-11-15
+> Terakhir diperbarui: 2026-11-16
+
+## DECISION UPDATE untuk [CLAUDE @w30 (2026-11-16 18:07)]
+- Keputusan baru (+ alasan 1 kalimat):
+  - E0b wajib dijalankan untuk 3 seed (0, 1, 2); disetujui Wafi. Alasan: gambar berformat .jpg dan SEL 1P mengompres ulang, jadi kontrol berpasangan per seed diperlukan untuk memisahkan efek template/kompresi dari efek tahap.
+  - Template ref-v2 tetap dibekukan walau ada bug callback waktu; jangan edit template maupun epoch_times.csv, dan saat analisis buang baris dengan epoch > EPOCHS. Alasan: semua kondisi memakai template yang sama, sehingga perbandingan tetap adil.
+  - Augmentasi albumentations bawaan tidak dimatikan. Alasan: EXP hanya boleh berisi epochs dan cond, dan baseline berjalan dengan kondisi yang sama. Di laporan tulis "tanpa augmentasi tambahan di luar bawaan Ultralytics".
+  - USULAN (Claude); Wafi tidak menyanggah, tetapi belum disetujui eksplisit oleh tim: Tahap 1 = E0b identity, E1 CLAHE, E2 specular kecil (<0,5% luas gambar), E3 = E1+E2; 3 seed; keputusan lewat val single_cls mAP50 vs E0b, lolos jika rata-rata naik >= 0,01 dan tidak ada seed yang lebih buruk dari identity; test disentuh sekali di akhir untuk pemenang; hasil negatif tetap dilaporkan. Dikeluarkan dari training: Gaussian, HE, MSRCR, resize offline, augmentasi sebagai hyperparameter, ROI crop, ROI U-Net. Pelengkap di luar training: uji ketahanan degradasi sintetis (blur, gerak, cahaya rendah, JPEG; val saja), quality gate di aplikasi, analisis visual Gaussian/HE/MSRCR tanpa training.
 
 ## DECISION UPDATE untuk [@w30 (2026-11-15 12:08)]
 - Keputusan baru (+ alasan 1 kalimat):

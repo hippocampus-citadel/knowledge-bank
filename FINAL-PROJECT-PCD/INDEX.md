@@ -1,12 +1,12 @@
 # FINAL PROJECT PCD - Sistem Skrining Awal Kesehatan Gigi Berbasis Kamera Smartphone
 
 > LLM: baca dulu `SOP.md` dan `PREFERENCES.md`:
-> - SOP: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/SOP.md?v=20261114
+> - SOP: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/SOP.md?v=20261116
 > - PREFERENCES: https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/PREFERENCES.md?v=20261031
 >
 > Jika tidak bisa membuka link, minta user menempelkan isinya.
 
-Terakhir diperbarui: 2026-11-15
+Terakhir diperbarui: 2026-11-16
 
 ## Ringkasan
 - Tujuan: Mengembangkan prototipe sistem skrining awal yang menganalisis foto rongga mulut dari kamera smartphone untuk menampilkan indikasi beberapa kondisi gigi dan gusi.
@@ -15,12 +15,12 @@ Terakhir diperbarui: 2026-11-15
 - Batas Klaim: Alat ditujukan untuk skrining/edukasi awal, bukan diagnosis medis dan bukan pengganti pemeriksaan dokter gigi.
 
 ## Status saat ini
-Proyek telah menyelesaikan penulisan laporan eksperimen lanjutan dan PPT serta klarifikasi tiga split data, di mana `dataset_split_v2` ditetapkan untuk baseline dan ablasi. Template `preprocessing_REF_v2.ipynb` dengan kontrak SEL 1P dan pencatatan waktu per epoch telah dibuat dan diuji lokal, namun belum diverifikasi di Colab termasuk struktur zip dan format gambar. Analisis awal daftar preprocessing Anggota B mengidentifikasi kategori kecocokan, risiko inpainting specular, serta kebutuhan keputusan mengenai resize, augmentasi, dan ROI sebelum Tahap 1. Langkah prioritas saat ini meliputi *critical review* metode B, pengujian segera ref-v2 di Colab, penetapan metrik keputusan tertulis, serta pembersihan folder ganda dan pencatatan `run_meta.json` di Drive.
+Sesi ini menyelesaikan smoke test dan eksperimen E0b (pre_identity) untuk seed 0 dan 1, menunjukkan selisih val mAP50 <0,002 terhadap baseline raw (jauh di bawah SD 0,0049 dan margin 0,01) sehingga sanity check lolos untuk 2 dari 3 seed. Template ref-v2 dibekukan meski ada bug baris epoch ekstra (+17 detik) dan augmentasi bawaan Ultralytics tetap aktif demi keadilan perbandingan. E0b seed 2 tertunda akibat kuota GPU akun-1, sedangkan E1–E3 belum dimulai menunggu pembersihan data seed 99, penguncian parameter specular, dan delegasi tugas tim. Keputusan fase 1 (E0b, E1 CLAHE, E2 specular kecil, E3 gabungan) dengan aturan keputusan val mAP50 sudah disepakati Wafi, namun pertanyaan terbuka soal format val/test, versi albumentations, anggaran GPU, mask gigi, dan persetujuan dosen masih terbuka.
 
 ## Langkah berikutnya
-1. Wafi menyetujui atau mengubah usulan di bawah.
-2. Uji asap ref-v2 di Colab: PRE=[("identity",{})], cond pre_identity, epochs 2, seed 99; hapus baris seed 99 dari CSV.
-3. Tetapkan TERTULIS sebelum Tahap 1: metrik, margin, aturan keputusan, parameter dikunci.
+1. Pastikan baris seed 99 sudah terhapus dari kedua CSV. Kalau belum, hapus sekarang, karena ikut menggeser statistik E0b.
+2. Jalankan E0b seed 2 (SEED=2, EXP={"cond":"pre_identity"}, PRE=[("identity",{})]); urutan sel: SEL 0, SEL 1, SEL 1P, sel bobot awal, SEL 2, SEL 3.
+3. Hitung rata-rata dan SD E0b dari 3 seed (val single_cls mAP50). Angka ini menjadi pembanding resmi E1/E2/E3. Jangan memakai baseline raw sebagai pembanding utama.
 
 ## Keputusan penting (final)
 - Judul resmi project ini adalah Implementasi Teknik Pengolahan Citra Digital untuk Meningkatkan Deteksi Lesi Karies pada Foto Intraoral Remaja dan Dewasa Muda Berbasis Aplikasi Web
@@ -39,9 +39,9 @@ Proyek telah menyelesaikan penulisan laporan eksperimen lanjutan dan PPT serta k
 ## Konteks tambahan (baca HANYA jika kondisinya terpenuhi)
 | File | Baca jika... |
 |---|---|
-| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/STATUS.md?v=20261115 | perlu detail progres |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/STATUS.md?v=20261116 | perlu detail progres |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/REQUIREMENTS.md?v=20261031 | perlu mengetahui detail spesifik ketentuan dari dosen |
-| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/DECISION.md?v=20261115 | akan mengusulkan perubahan arah |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/DECISION.md?v=20261116 | akan mengusulkan perubahan arah |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/internal_teams_files/literature-review.md?v=20261031 | butuh melihat hasil literature review yang telah dikumpulkan |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/extras/proposal_feedback.md?v=20261105 | butuh melihat hasil evaluasi proposal oleh dosen |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/extras/log_history?v=20261111 | perlu meninjau apa saja yang telah dilakukan di sesi sesi sebelumnya |
