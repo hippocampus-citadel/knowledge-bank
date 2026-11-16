@@ -1,10 +1,10 @@
 # SOP — Aturan Umum untuk LLM
 
-Terakhir diperbarui: 2026-11-14
+Terakhir diperbarui: 2026-11-16
 Berlaku untuk semua project. Jika bentrok, aturan di folder project menang atas file ini.
 
 ## 1. Cara memakai repo ini
-1. Baca `PREFERENCES.md` (folder `_global`) setelah file ini.
+1. Baca `PREFERENCES.md` setelah file ini.
 2. Baca `INDEX.md` project yang diminta user. Jangan buka project lain.
 3. Buka file di `extra/` HANYA jika kondisi "baca jika ..." di INDEX terpenuhi.
 4. Jika tidak bisa membuka suatu link, katakan terus terang dan minta user menempelkan isinya. Jangan mengaku sudah membaca file yang tidak dibuka. Jangan menebak isinya.
