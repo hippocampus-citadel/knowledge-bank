@@ -1,6 +1,12 @@
 # DECISION PROJECT
 
-> Terakhir diperbarui: 2026-11-15
+> Terakhir diperbarui: 2026-11-19
+
+## DECISION UPDATE untuk [CLAUDE @em (2026-11-19 08:11)]
+- Keputusan baru (+ alasan 1 kalimat):
+  - GroupKFold(7) di 21 peserta train, folds.json dikunci, test tidak disentuh (keputusan user setelah pengecekan; syarat 6 kelas per fold terpenuhi otomatis dan StratifiedGroupKFold tidak lebih seimbang).
+  - Hasil CV dan hasil lama [1,25,27] tidak digabung dalam satu tabel (protokolnya berbeda).
+  - Usulan, belum dikonfirmasi user: pola NAME memuat "cv", hasil dilaporkan per fold (bukan hanya rata-rata), peserta 14/16/25 dijadikan peserta diagnostik tetap dan tidak dipakai untuk menyetel model.
 
 ## DECISION UPDATE untuk [CLAUDE @em (2026-11-15 18:09)]
 - Keputusan baru (+ alasan 1 kalimat):
