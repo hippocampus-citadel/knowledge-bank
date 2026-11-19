@@ -1,6 +1,16 @@
 # DECISION PROJECT
 
-> Terakhir diperbarui: 2026-11-16
+> Terakhir diperbarui: 2026-11-19
+
+## DECISION UPDATE untuk [CLAUDE @w30 (2026-11-19 08:10)]
+- Keputusan baru (+ alasan 1 kalimat):
+  - E1 dinyatakan gagal menurut aturan yang tidak diubah; parameter tidak disetel ulang (menjaga val independen).
+  - Pembanding resmi E1 sampai E3 adalah rata-rata E0b 0,9141 (bukan baseline raw), karena template identik dan sanity check lolos 3/3.
+  - E2 tidak dilatih sekarang (user setuju "kurang worth it": efek diperkirakan di bawah margin 0,01 dan memakan sekitar 7 jam GPU); kode dan parameter disimpan, boleh dilatih (3 seed) bila nanti ada sisa GPU dan waktu. E3 (E1+E2) ditahan, tidak relevan karena E1 gagal.
+  - Batas keamanan E2 ditetapkan sebelum melihat angka dan tidak dilonggarkan: batal bila >20% kotak tersentuh atau >5% luas kotak terhapus; E2 layak GPU bila >=10% gambar terdampak; maksimal 2 putaran perbaikan detektor.
+  - Uji ketahanan memakai best.pt E0b tanpa retrain, dengan tingkat degradasi dan ambang 0,02 ditetapkan sebelum melihat hasil; urutan evaluasi selalu degradasi lalu preprocessing.
+  - USULAN Claude, belum dikonfirmasi tim: CLAHE keluar dari pipeline dan kasus gelap ditangani gate kecerahan, bukan perbaikan citra.
+  - USULAN protokol gate v2, belum disetujui: ambang dipilih berdasarkan bahaya (tolak bila penurunan mAP kondisi itu > 0,02), val dipakai sebagai set pengembangan gate dengan satu konfirmasi di test (penyimpangan yang harus dicatat), dan metrik ketajaman diganti yang sensitif arah.
 
 ## DECISION UPDATE untuk [CLAUDE @w30 (2026-11-16 18:07)]
 - Keputusan baru (+ alasan 1 kalimat):

@@ -1,37 +1,46 @@
 # STATUS PROJECT
 
-> Terakhir diperbarui: 2026-11-16
+> Terakhir diperbarui: 2026-11-19
 
-**`[CLAUDE @w30 (2026-11-16)]`**
+**`[CLAUDE @w30 (2026-11-19)]`**
 
 ## Saat ini
 - Sedang berjalan / terhambat:
-  - E0b seed 2 belum jalan: T4 akun-1 sedang kena batas pemakaian. Opsi: tunggu limit pulih, atau jalankan di akun lain (notebook salinan baru + runtime baru; satu akun per seed; ACCOUNT berupa label, bukan email).
-  - E1, E2, E3 belum dijalankan. Di BLOK DIISI SEL 1P baru ada fungsi identity dan clahe; fungsi specular belum ditulis.
-  - Belum dikonfirmasi: (a) baris seed 99 sudah dihapus dari pre_identity_results.csv (6 baris) dan pre_identity_timing.csv (1 baris); (b) md5 best.pt seed 0 dan 1 sudah dicatat dan best.pt sudah diunduh ke laptop.
+  - Runtime Colab sudah hilang; CSV hasil sudah aman di Drive. Notebook "Salinan preprocessing_REF_v2" adalah SANDBOX yang sudah diubah (pemeriksaan GPU diberi komentar, sel tambahan). Jangan dipakai untuk training; salin ulang template asli untuk training. Di sandbox jalankan SEL 0 saja (mengekstrak dataset ke /content/v2_raw = ROOT; ZIP berupa Path). SEL 1P menimpa gambar di tempat, jangan jalankan di sandbox kalibrasi.
+  - Kalibrasi gate v2 menunggu persetujuan protokol (lihat Keputusan baru dan Pertanyaan terbuka).
+  - E1 seed 2: belum dijalankan (hasil tidak mengubah keputusan, hanya melengkapi SD di laporan).
+  - Pertanyaan "daftar pipeline wajib atau contoh" sengaja DITAHAN oleh user.
 
 ## Langkah berikutnya
 - Langkah berikutnya (urut prioritas):
-  1. Pastikan baris seed 99 sudah terhapus dari kedua CSV. Kalau belum, hapus sekarang, karena ikut menggeser statistik E0b.
-  2. Jalankan E0b seed 2 (SEED=2, EXP={"cond":"pre_identity"}, PRE=[("identity",{})]); urutan sel: SEL 0, SEL 1, SEL 1P, sel bobot awal, SEL 2, SEL 3.
-  3. Hitung rata-rata dan SD E0b dari 3 seed (val single_cls mAP50). Angka ini menjadi pembanding resmi E1/E2/E3. Jangan memakai baseline raw sebagai pembanding utama.
-  4. Jalankan `import albumentations; print(albumentations.__version__)` di tiap akun penjalan, lalu bandingkan baris log albumentations antara run baseline dan E0b.
-  5. Delegasikan E1 (CLAHE) ke anggota tim: kanal L di LAB, clip 2,0, tile 8x8, 3 seed. Parameter sudah dikunci, jangan disetel dari hasil val.
-  6. Sebelum training E2 (inpainting specular kecil), selesaikan cek keamanan: hitung tumpang tindih komponen specular dengan kotak label karies di train, lalu periksa 30 sampel secara visual. Batalkan E2 jika tumpang tindih besar. Jalankan E3 (E1+E2) hanya setelah cek E2 selesai.
-  7. Tulis tertulis sebelum Tahap 1: metrik, margin, aturan keputusan, parameter terkunci.
+  1. Catat di DECISION.md: E1 gagal (+ angka), kalibrasi E2 dua detektor lengkap termasuk yang gagal, hasil uji ketahanan dan tingkat degradasi, aturan 0,02, E0b + CLAHE inferensi-saja gagal.
+  2. Putuskan arah Tahap 1 berikutnya karena CLAHE gagal dan E2 diperkirakan netral: (a) setujui atau tolak protokol gate v2; (b) analisis kesalahan per strata pada best.pt E0b (blur, kecerahan, retraktor) yang belum dikerjakan; (c) maksimal 1 sampai 2 varian preprocessing baru yang ditetapkan sebelum dijalankan (kandidat: normalisasi warna/white balance, denoise ringan), 3 seed, pembanding E0b.
+  3. Tanyakan ke dosen: daftar pipeline wajib atau contoh, dan tenggat final.
+  4. Verifikasi kode _specular terhadap specular_mask pada 3 gambar bila E2 pernah dilatih; verifikasi nilai test E0b seed 0 dan 1 ke CSV.
+  5. Layer aplikasi web dan implementasi quality gate di aplikasi: tidak dibahas sesi ini.
 
 ## Pertanyaan terbuka
 - Pertanyaan terbuka:
-  - Apakah pemilik template mau memperbaiki bug baris epoch ekstra, dan apa penyebab pastinya (belum dibuktikan dari kode)?
-  - Format gambar val/test: apakah semuanya .jpg?
-  - Versi albumentations di tiap akun (tidak dikunci di config.json); apakah sama?
-  - Anggaran GPU: dengan sekitar 2 jam per run, 12 run (4 kondisi x 3 seed) kira-kira 24 jam, bukan 17 jam (ekstrapolasi dari seed 0 dan 1). Cukup atau perlu dikurangi?
-  - Apakah dataset punya mask gigi? Cek nilai label dan shape_type di berkas JSON LabelMe. Status ROI klasik (varian mask) belum diputuskan.
-  - Parameter specular (ambang HSV, batas 0,5%) belum dikalibrasi; siapa yang mengunci?
-  - Pembagian E1 dan E2 ke anggota tim, dan siapa yang menyetujui hasil cek keamanan E2?
-  - REQUIREMENTS.md tidak mencantumkan bobot persentase per kriteria. Apakah dosen bisa dikonfirmasi bahwa daftar pipeline hanya contoh?
+  - Setujukah tim pada protokol gate v2 (val dipakai untuk menyetel gate)? Apakah nilai test E0b seed 0 dan 1 di CSV cocok dengan yang dikutip?
+  - Apakah desain Tahap 1 di DECISION.md (sebelumnya berstatus usulan) sudah disetujui eksplisit oleh tim?
+  - Apakah dosen mewajibkan semua tahap pada daftar pipeline atau hanya yang relevan (ditahan user)? Tenggat final? (11 November hanya progress update pertama.)
+  - Anggaran GPU tersisa dan apakah dataset punya mask gigi (belum dijawab).
+  - Dua gambar val dengan label di luar batas (lihat di atas): perlu diperiksa sumbernya; val efektif 824 gambar.
 
 ## Riwayat 
+- Selesai sesi ini:
+  (Metrik acuan semua eksperimen: val mAP50 single_cls=True. Test hanya untuk dokumentasi.)
+  1. E0b (pre_identity) seed 2 selesai: val 0,9089; test 0,8999. Dengan itu E0b 3 seed: val 0,9191 / 0,9142 / 0,9089, rata-rata 0,9141, SD sampel 0,0051. Sanity check template ref-v2 lolos 3 dari 3 seed (selisih val terhadap baseline raw +0,0013, +0,0017, +0,0008; seed 0 tercatat 0,9190 di uji ketahanan, hanya beda pembulatan). Nilai test E0b seed 0 dan 1 yang dikutip di sesi ini tidak terverifikasi, mohon cek ke CSV sebelum dipakai di laporan.
+  2. Pembersihan data: baris baseline_raw seed 2 dipulihkan dari CSV yang rusak akibat spreadsheet berlokal Indonesia (0,6743 terbaca 6,743 dan seterusnya). Sumber acuan sebaiknya CSV mentah di Drive. Baris seed 99 sudah dihapus dari kedua CSV (dikonfirmasi user). albumentations 2.0.8 di akun-1 dan akun-2, ultralytics 8.4.207, semua gambar .jpg.
+  3. E1 (CLAHE: LAB kanal L, clip 2,0, tile 8x8, 3 seed direncanakan) didelegasikan ke teman B (seed 0) dan C (seed 1) di akun berbeda. Seed 2 belum dijalankan. Val: 0,8985 (seed 0) dan 0,8931 (seed 1) lawan E0b 0,9191 dan 0,9142 (selisih sekitar -0,021). Test: 0,8905 dan 0,8877. Aturan keputusan (rata-rata >= 0,9241 dan tiap seed >= E0b seed yang sama) GAGAL, dan secara matematis tidak bisa diselamatkan seed 2. Fungsi _clahe di SEL 1P sudah direview (parameter dibaca dari p["clip"], p["tile"]; BGR-LAB-BGR; hanya kanal L). User memastikan FP dan preview aman. Parameter TIDAK boleh disetel ulang dari hasil val.
+  4. E2 (specular kecil) hanya kalibrasi dan cek keamanan, TIDAK dilatih. Detektor (urutan penting): kandidat = min(B,G,R) >= min_ch; filter ukuran komponen terhubung (min_area <= luas <= max_area_frac x luas gambar); lalu syarat kontras lokal (V - medianBlur(V, med_k) >= local_d); dilate; cv2.inpaint TELEA. Hasil pada train (3.859 gambar, 4.144 kotak label): detektor lama (V>=250 dan S<=30): 99,9% gambar dan 93,9% kotak tersentuh, gagal. Detektor baru min_ch 250, local_d 30: 75,9% gambar, 21,5% kotak tersentuh (gagal tipis terhadap batas 20%), luas kotak terhapus rata-rata 0,024%. Detektor baru min_ch 250, local_d 60: 59,7% gambar, 11,2% kotak, luas kotak terhapus rata-rata 0,008% (p95 0,046%), rasio specular di dalam kotak vs acak 0,55; lolos semua batas yang ditetapkan sebelum melihat angka. Parameter usulan: min_ch 250, local_d 60, med_k 51, max_area_frac 0,005, min_area 3, dilate 1, radius 3. Pemeriksaan visual pratinjau user: untuk 250/30 hampir tidak ada garis merah dibanding detektor lama; pratinjau 250/60 belum dilaporkan. Kode _specular untuk SEL 1P sudah ditulis tetapi belum diverifikasi identik dengan specular_mask pada 3 gambar.
+  5. Uji ketahanan (robustness) memakai best.pt YANG SUDAH ADA tanpa retrain, pada val (826 gambar, 824 efektif karena 2 label di luar batas diabaikan Ultralytics: Right_Lateral_View anonymous_003-008-1115-01 dan Left_Lateral_View anonymous_003-008-1116-00). Urutan: gambar asli, degradasi, tahap preprocessing, simpan JPEG q100. Degradasi (skala 640): blur Gaussian sigma 1/2/4; blur gerak horizontal panjang 5/11/21; cahaya rendah kali 0,6/0,4/0,25; JPEG q 50/25/10. Cek kewajaran: nilai clean cocok dengan evaluasi E0b sebelumnya. Rata-rata val mAP50 E0b (3 seed): clean 0,9141; blur 0,9143 / 0,8764 / 0,8033; gerak 0,9072 / 0,8583 / 0,7180; gelap 0,9125 / 0,9035 / 0,8444; JPEG 0,9144 / 0,9106 / 0,8695. Ambang bahaya (turun > 0,02) terlewati antara L1 dan L2 untuk blur dan gerak, antara L2 dan L3 untuk gelap dan JPEG. Model rapuh terhadap ketajaman, relatif tahan terhadap cahaya dan kompresi.
+  6. E1 pada val terdegradasi (seed 0 dan 1): kalah dari E0b di hampir semua kondisi (clean 0,8958); hanya dark_L3 unggul (0,8963 vs 0,8444) dan itu bias karena degradasi gelap kita linear, kebalikan CLAHE. E0b + CLAHE saat inferensi saja (3 seed): clean turun ke 0,8632 (-0,051); aturan (dark L2 dan L3 harus > +0,02 di ketiga seed) GAGAL (dark L2 negatif, dark L3 hanya +0,018 / +0,060 / +0,010). CSV tersimpan di Drive: robustness_identity.csv, robustness_clahe.csv, robustness_e0b_clahe_infer.csv.
+  7. Kalibrasi quality gate v1 (gate_calibration.py; ambang = persentil ke-5 train bersih n=400; ketajaman = varians Laplacian pada lebar 640 >= 29,6; kecerahan = rata-rata abu-abu >= 126,5): GAGAL terhadap kriteria. Blur L1 (tidak berbahaya) lolos hanya 4,5%, gerak L1 50,5%, gelap L1 0%, clean lolos kedua gate 89%. Penyebab: persentil variasi alami bukan ukuran bahaya; varians Laplacian tidak konsisten antar jenis blur (blur L1 bermedian 14,3 vs gerak L2 16,4 padahal gerak L2 jauh lebih merusak).
+  8. Diskusi desain: quality gate vs model robust. Pandangan Claude: gate sebagai lapisan utama untuk ketajaman, kebocoran gate diukur lewat kurva ketahanan; robustness training (augmentasi) adalah eksperimen terpisah dan baseline harus diulang. U-Net intraoral berprioritas rendah (model publik berdomain foto intraoral belum diverifikasi ada; ROI crop melanggar kontrak tahap); cara murah mengujinya adalah analisis kesalahan pada best.pt E0b (apakah false positive banyak di gusi, lidah, retraktor).
+  9. Dibaca: template DL milik project sebelah (adaptor path Drive via pintasan folder). Keputusan: tidak mengubah template beku untuk E1 (risiko CSV bersama tertimpa antar-akun, kontaminasi seed 99 sudah menunjukkan rapuhnya).
+  10. Skrip yang dibuat (ada di Colab/Drive user, tidak ada di repo): e2_specular_calibration.py (calibrate(n), preview, overlap), robustness_eval.py (main(pre_label, pre_fn, weights)), gate_calibration.py. Pustaka bantu perlu dimuat berurutan di runtime yang sama.
+
 - Selesai sesi ini:
   - Notebook preprocessing_REF_v2.ipynb dan manual (Claude Doc "Manual Eksperimen Folder Bersama") sudah dibaca. Seed baseline = 0, 1, 2.
   - Smoke test ref-v2 di Colab lolos (akun-1, T4, SEED 99, 2 epoch, cond pre_identity): bootstrap, SEL 1P (5.505 gambar, 117 dtk), training, backup Drive, dan SEL 3 berjalan tanpa error.
