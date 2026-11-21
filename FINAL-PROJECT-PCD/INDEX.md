@@ -32,7 +32,7 @@ Verifikasi CSV E0b (3 seed) selesai dengan rata-rata val mAP50 0,9141 dan item "
 (Daftar lengkap: DECISIONS.md)
 
 ## Batasan / requirement khusus
-- Deadline: 11 November 2026 untuk Weekly Progress (BUKAN DEADLINE FINAL)
+- Deadline: 7 DESEMBER 2026 (Deadline Final untuk pengumpulan seluruh output)
 - Aturan dosen: lihat REQUIREMENTS.md
 - Hal yang tidak boleh diubah: Tema Skrining Gigi via Kamera Smartphone 
 
