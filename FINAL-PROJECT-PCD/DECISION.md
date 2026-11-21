@@ -1,6 +1,19 @@
 # DECISION PROJECT
 
-> Terakhir diperbarui: 2026-11-19
+> Terakhir diperbarui: 2026-11-21
+
+## DECISION UPDATE untuk [CLAUDE @w30 (2026-11-21 11:27)]
+- Keputusan baru (+ alasan 1 kalimat):
+  - TENGGAT FINAL = 7 DESEMBER 2026 (dari dosen); perbarui INDEX bagian Batasan (11 November hanya Weekly Progress). Alasan: ketentuan terbaru.
+  - Daftar tahapan pipeline di ketentuan dosen OPSIONAL tetapi harus sesuai solusi yang diambil (dikonfirmasi user). Alasan: menentukan isi pipeline aplikasi.
+  - Cakupan klaim dan gate: HANYA foto permukaan kunyah (Mandibular dan Maxillary); aplikasi meminta pengguna memotret permukaan kunyah; sudut lain "belum divalidasi" tanpa gate; perluasan masuk "pengembangan selanjutnya". Alasan: 96,7% lesi di dua view itu, ambang hanya dikalibrasi di sana, dan view lain hanya 3-15 lesi (dikonfirmasi user).
+  - Gate ketajaman v2 = Tenengrad, tolak bila <1134,018, hanya oklusal. Alasan: satu-satunya metrik lolos aturan terkunci di val dan terkonfirmasi di test (TPR 0,874; FPR 0,128).
+  - Test sudah dipakai SATU kali untuk gate ketajaman; tidak boleh diulang untuk komponen itu. Alasan: menjaga independensi.
+  - Protokol gate v2 (val untuk menyetel, test sekali, ambang berbasis bahaya bukan persentil) diterapkan. Alasan: v1 berbasis persentil gagal.
+  - [Usulan Claude, diikuti user, belum dikonfirmasi tertulis] Tidak ada varian preprocessing baru yang DILATIH (CLAHE gagal, specular tidak dilatih, normalisasi warna dan denoise tanpa dasar data); hasil negatif dilaporkan. Tahap klasik tetap ditampilkan dan dianalisis di aplikasi/laporan (gate, peringatan pantulan, koreksi gelap hanya bila E-B lolos). Alasan: kegagalan CLAHE, FP berada di gigi, dan dalam-view tidak ada efek kualitas foto; rubrik menilai tahapan dan analisisnya, bukan hanya kenaikan skor.
+  - [Usulan Claude, belum diputuskan] Model aplikasi = baseline raw seed 0 (val 0,9178; test 0,9021; md5 aa7628bbc7ecdc19f000a5ba0f18e6ac; hasil CPU terreproduksi). Alasan: dilatih pada foto asli seperti input pengguna dan artefaknya terverifikasi.
+  - U-Net/ROI, E2 training, E3, dan retrain model tetap DIBEKUKAN. Alasan: FP bukan di gusi/bibir, tenggat dekat, dan efek diperkirakan kecil.
+  - Label dataset TIDAK diubah; skor/presisi dilaporkan terhadap label dataset dengan catatan kemungkinan label lesi dini tidak lengkap (sampel satu dokter, kecil). Alasan: perbandingan antar-eksperimen harus tetap valid.
 
 ## DECISION UPDATE untuk [CLAUDE @w30 (2026-11-19 08:10)]
 - Keputusan baru (+ alasan 1 kalimat):

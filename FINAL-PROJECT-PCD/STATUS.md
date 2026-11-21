@@ -1,33 +1,67 @@
 # STATUS PROJECT
 
-> Terakhir diperbarui: 2026-11-19
+> Terakhir diperbarui: 2026-11-21
 
-**`[CLAUDE @w30 (2026-11-19)]`**
+**`[CLAUDE @w30 (2026-11-21)]`**
 
 ## Saat ini
 - Sedang berjalan / terhambat:
-  - Runtime Colab sudah hilang; CSV hasil sudah aman di Drive. Notebook "Salinan preprocessing_REF_v2" adalah SANDBOX yang sudah diubah (pemeriksaan GPU diberi komentar, sel tambahan). Jangan dipakai untuk training; salin ulang template asli untuk training. Di sandbox jalankan SEL 0 saja (mengekstrak dataset ke /content/v2_raw = ROOT; ZIP berupa Path). SEL 1P menimpa gambar di tempat, jangan jalankan di sandbox kalibrasi.
-  - Kalibrasi gate v2 menunggu persetujuan protokol (lihat Keputusan baru dan Pertanyaan terbuka).
-  - E1 seed 2: belum dijalankan (hasil tidak mengubah keputusan, hanya melengkapi SD di laporan).
-  - Pertanyaan "daftar pipeline wajib atau contoh" sengaja DITAHAN oleh user.
+  - E-B siap dijalankan user (GPU T4); hasil belum ada.
+  - Dua cek val yang tersisa untuk gate ketajaman: (a) tingkat tolak Tenengrad per view (Mandibular vs Maxillary) dari nilai_per_gambar.csv; (b) melihat 4-8 foto bersih yang ditolak (bukti nyata dan figur laporan).
+  - Backend dan service model belum jalan; modul quality_gate.py belum dibuat (ditunda; user memilih E-B dulu).
+  - Pesan lanjutan ke dokter gigi (opsional) belum dikirim.
+  - Tidak ada hambatan eksternal selain menunggu jawaban/hasil di atas.
 
 ## Langkah berikutnya
 - Langkah berikutnya (urut prioritas):
-  1. Catat di DECISION.md: E1 gagal (+ angka), kalibrasi E2 dua detektor lengkap termasuk yang gagal, hasil uji ketahanan dan tingkat degradasi, aturan 0,02, E0b + CLAHE inferensi-saja gagal.
-  2. Putuskan arah Tahap 1 berikutnya karena CLAHE gagal dan E2 diperkirakan netral: (a) setujui atau tolak protokol gate v2; (b) analisis kesalahan per strata pada best.pt E0b (blur, kecerahan, retraktor) yang belum dikerjakan; (c) maksimal 1 sampai 2 varian preprocessing baru yang ditetapkan sebelum dijalankan (kandidat: normalisasi warna/white balance, denoise ringan), 3 seed, pembanding E0b.
-  3. Tanyakan ke dosen: daftar pipeline wajib atau contoh, dan tenggat final.
-  4. Verifikasi kode _specular terhadap specular_mask pada 3 gambar bila E2 pernah dilatih; verifikasi nilai test E0b seed 0 dan 1 ke CSV.
-  5. Layer aplikasi web dan implementasi quality gate di aplikasi: tidak dibahas sesi ini.
+  1. Jalankan E-B (val saja), kirim teks keluaran (tabel mAP50, baris Kewajaran, verdict) ke Claude untuk tafsir. Jika gagal atau netral: hapus koreksi gelap dari aplikasi dan laporkan sebagai hasil negatif.
+  2. Cek per view Tenengrad dan lihat foto bersih yang ditolak (val).
+  3. Buat quality_gate.py (Tenengrad <1134,018 ditolak; hanya foto oklusal; keluaran diterima/ditolak + alasan) dan serahkan ke backend; backend dan service model (usul baseline raw seed 0).
+  4. Aturan kecerahan: bila ada gate kecerahan/penolakan gelap berat, kalibrasi di val; TIDAK terkonfirmasi test (test sudah dipakai untuk ketajaman). Putuskan apakah test dipakai sekali lagi dengan catatan terbuka.
+  5. Opsional: E-C (strata fraksi pantulan, piksel gelap, bayangan per view untuk menjelaskan Maxillary lebih lemah); tabel sensitivitas aturan (TPR 0,70-0,90; batas bahaya 0,01-0,03); analisis area terdeteksi (segmentasi warna + morfologi di dalam kotak, hanya alat bantu visual tanpa klaim akurasi).
+  6. Laporan: figur sebelum-sesudah (contoh_sebelum_sesudah.png dari E-A, eb_contoh_sebelum_sesudah.png dari E-B), makalah IEEE, PPT, video <=10 menit; target selesai sebelum 7 Des 2026 (jadwal usulan: 22-25 Nov gate+service; 26-29 Nov integrasi dan uji akhir; 30 Nov-2 Des makalah/PPT; 3-4 Des video; 5-6 Des cadangan).
+  7. Pastikan Wafi menguasai konsep PCD yang dipakai (ruang warna, konvolusi Sobel/Laplacian, FFT, CLAHE/histogram, morfologi, ambang dan komponen terhubung) untuk penilaian individu.
+  8. Perbarui DECISION.md, STATUS.md, INDEX.md (termasuk bagian Batasan: tenggat final) dan simpan semua skrip ke Drive/repo.
 
 ## Pertanyaan terbuka
 - Pertanyaan terbuka:
-  - Setujukah tim pada protokol gate v2 (val dipakai untuk menyetel gate)? Apakah nilai test E0b seed 0 dan 1 di CSV cocok dengan yang dikutip?
-  - Apakah desain Tahap 1 di DECISION.md (sebelumnya berstatus usulan) sudah disetujui eksplisit oleh tim?
-  - Apakah dosen mewajibkan semua tahap pada daftar pipeline atau hanya yang relevan (ditahan user)? Tenggat final? (11 November hanya progress update pertama.)
-  - Anggaran GPU tersisa dan apakah dataset punya mask gigi (belum dijawab).
-  - Dua gambar val dengan label di luar batas (lihat di atas): perlu diperiksa sumbernya; val efektif 824 gambar.
+  - Hasil E-B (lolos, gagal, atau netral)?
+  - Apakah gate Tenengrad adil antara Mandibular dan Maxillary (cek per view belum dijalankan)? Apakah foto bersih yang ditolak memang buram?
+  - Model aplikasi: setujukah baseline raw seed 0? Apakah usulan menutup eksplorasi preprocessing yang dilatih disetujui tim?
+  - Gate kecerahan: dikalibrasi val saja (tidak terkonfirmasi test) atau memakai test sekali lagi dengan catatan terbuka?
+  - Bagaimana memvalidasi gate pada foto buram HP nyata (belum ada data)? Bagaimana aplikasi menegakkan "foto oklusal" (petunjuk saja atau klasifikasi sudut)?
+  - Apakah 7 Des 2026 berlaku untuk semua luaran (aplikasi, PPT, video, makalah) atau hanya sebagian? (Jawaban user langsung saat review snapshot {ditulis user}: Ya)
+  - Apakah dokter gigi bersedia menjelaskan ciri pembeda noda vs karies awal dan boleh dicantumkan namanya? (Jawaban user langsung saat review snapshot {ditulis user}: pembeda sudah dijelaskan di chat private message, untuk nama dibuat anonim saja)
+  - Dua gambar val berlabel di luar batas: sumber belum diperiksa (lama). Anggaran GPU tersisa belum diketahui (lama).
+  - Verifikasi lama yang masih terbuka: kode _specular E2 identik dengan specular_mask (hanya relevan bila E2 dilatih).
 
 ## Riwayat 
+- Selesai sesi ini:
+  (Metrik acuan: val mAP50 single_cls=True. Test hanya sekali per komponen. Skrip di bawah dibuat Claude di chat dan BELUM ada di repo; simpan ke Drive/repo.)
+  1. Verifikasi CSV E0b (pre_identity_result.csv, 3 seed): nilai test single_cls seed 0/1/2 = 0,9036 / 0,8978 / 0,8999; val 0,9191 / 0,9142 / 0,9089 (rata-rata 0,9141, SD 0,0051). Item "test seed 0 dan 1 belum terverifikasi" TERTUTUP. Subset test: tanpa retraktor 0,9138 / 0,9108 / 0,9133; dengan retraktor 0,8951 / 0,8902 / 0,8864. DECISION.md sudah memuat E1 gagal, kalibrasi E2, uji ketahanan, aturan 0,02 (dinyatakan user).
+  2. ANALISIS KESALAHAN best.pt E0b (val, 3 seed, skrip error_analysis_e0b.py, fungsi run_error_analysis()). Cek kewajaran lolos: AP50 hitungan sendiri 0,9172 / 0,9123 / 0,9077 vs CSV (selisih <=0,0019). 824 gambar dipakai; 2 diabaikan karena label y di luar batas (Right_Lateral_View anonymous_003-008-1115-01, Left_Lateral_View anonymous_003-008-1116-00).
+     - Total (rata-rata 3 seed, conf>=0,25): AP50 0,9124; recall 0,932; presisi 0,700; FP 351/seed; FN 59/seed.
+     - Lesi val: 872 kotak; 843 (96,7%) di dua view oklusal (Mandibular 516, Maxillary_Occlusal 327); Right_Lateral 15, Left_Lateral 11, Frontal 3. Skor view kecil tidak bermakna.
+     - Mandibular AP50 0,958 (presisi 0,804) vs Maxillary 0,839 (presisi 0,597); recall serupa (0,949 vs 0,926), jadi gap dari tebakan berlebih.
+     - Retraktor 0,9054 vs tanpa 0,9204. Recall menurut ukuran lesi: kecil 0,880, sedang 0,937, besar 0,981 (35 dari 59 FN/seed adalah lesi kecil).
+     - Rincian FP (seed 0/1/2): latar di citra tanpa label 133/139/92; latar di citra berlabel 170/183/126; lokalisasi 61/69/53; duplikat 9/8/11.
+     - Strata ketajaman/kecerahan/miring warna pada semua view tampak menurun (mis. ketajaman Q1 0,77) tetapi TERKONFUNDING jenis foto (varians Laplacian bergantung isi foto). Ulang hanya pada view oklusal dengan kuartil DI DALAM tiap view (330 gambar, 843 GT, total 0,9210): ketajaman Q1-Q4 0,9153 / 0,9334 / 0,8948 / 0,9421; kecerahan 0,9222 / 0,9215 / 0,9284 / 0,9202; miring warna 0,9109 / 0,9228 / 0,9392 / 0,9175. Hanya satu sel melewati batas 0,02 (ketajaman Q3, non-monoton). Kesimpulan (Medium): variasi alami ketajaman, kecerahan, miring warna tidak berpengaruh konsisten setelah kontrol jenis foto.
+     - Cek manual user atas 30 FP berkeyakinan tertinggi (galeri seed 0): tebakan salah ada di gigi (mahkota menghitam), TIDAK ada di gusi, bibir, atau bagian lain. Aturan keputusan terkunci (G+A >=50% baru pertimbangkan ROI/U-Net) tidak terpenuhi.
+     - Penilaian dokter gigi (kenalan teman user, dari foto): karies = nomor galeri 2, 9, 11, 15, 21, 26, 29; bukan karies = 16, 27; sisanya ragu (noda atau karies kelas I pit and fissure, gambar kurang jelas). Tafsir Claude: dugaan "label dataset kurang lengkap untuk lesi dini" didukung sebagian (7 dari 9 yang pasti), tetapi mayoritas ambigu; sampel kecil, satu dokter, hanya FP berkeyakinan tertinggi (bias ke label terlewat); label TIDAK diubah. Foto Maxillary hampir semuanya "ragu" (dugaan dari galeri, perlu dicek).
+  3. E-A: PERBANDINGAN 4 UKURAN KETAJAMAN untuk gate v2 (skrip sharpness_study.py; run_sharpness_study(), confirm_test(); CPU saja; prefiks konstanta SE_). Aturan terkunci sebelum jalan: degradasi skala lebar 640 (Gaussian sigma 1/2/4; gerak horizontal 5/11/21); "berbahaya" = sigma 2 dan 4, gerak 11 dan 21 (turun >0,02 di uji ketahanan), "aman" = bersih, sigma 1, gerak 5; ambang dipilih di val dengan Youden J; LOLOS bila TPR>=0,80 dan FPR<=0,20; metrik terbaik = J tertinggi pada view oklusal.
+     - Hasil val, oklusal: Tenengrad (rata-rata Sobel gx^2+gy^2 pada abu-abu lebar 640) ambang 1134,018, TPR 0,853, FPR 0,097, J 0,756, LOLOS. Laplacian (v1) TPR 0,672 gagal; FFT (r0=0,10) TPR 0,762 FPR 0,100 gagal; re-blur (sigma 1,5) TPR 0,628 gagal. Semua view: tidak ada yang lolos (Tenengrad FPR 0,204).
+     - Tingkat tolak val (oklusal, Tenengrad): bersih 1,2%; blur sigma 1/2/4 = 16,7% / 89,1% / 100%; gerak 5/11/21 = 11,2% / 58,2% / 93,9%.
+     - Median Tenengrad foto bersih (val): Mandibular 3447, Frontal 3352, Maxillary 2219, Left_Lateral 2219, Right_Lateral 1952 (isi foto memengaruhi ukuran).
+     - KONFIRMASI TEST (confirm_test, DIPAKAI SATU KALI; n=328 foto oklusal): TPR 0,874, FPR 0,128, LOLOS. Tolak: bersih 2,4%; blur 22,0% / 91,8% / 100%; gerak 14,0% / 62,2% / 95,7%. Flag penjaga TEST_SUDAH_DIPAKAI.flag ada di /content (hilang jika runtime reset): JANGAN ULANGI walau flag hilang.
+     - Diskusi angka: 0,02 punya dasar (sekitar 4x SD seed 0,0051; label aman/berbahaya tidak berubah untuk batas 0,007 sampai 0,037, dengan hanya 3 tingkat per degradasi); 0,80/0,20 SUBJEKTIF (FFT akan lolos bila TPR minimal 0,75; peringkat Tenengrad tetap teratas); r0 FFT dan sigma re-blur ditetapkan di muka tanpa disetel.
+     - Keterbatasan: degradasi sintetis; blur gerak hanya horizontal; belum diuji foto buram HP nyata; gerak 11 piksel masih lolos 38%.
+  4. E-B (KOREKSI GELAP ADAPTIF) skrip dark_correction_eb.py (run_eb(); butuh GPU T4; prefiks EB_) SUDAH DIBUAT dan diuji data palsu, BELUM dijalankan di data asli. Aturan terkunci: pemicu rata-rata abu-abu <100; koreksi gamma adaptif (ln0,5/ln(rata-rata/255), batas bawah 0,3) dan CLAHE kanal L (clip 2,0, tile 8x8) hanya bila terpicu; kondisi linear x0,6/0,4/0,25 (pembanding, mudah dibalik) dan realistik gelap+derau Poisson k=0,25 dan 0,10; berbahaya = turun >0,02; LOLOS bila pada semua kondisi realistik berbahaya skor naik >0,02 di SETIAP seed dan pada foto bersih terpicu <=2% dengan |perubahan| <=0,005; bila tidak ada kondisi realistik berbahaya = netral. Skrip berhenti bila mAP bersih per seed tidak cocok (toleransi 0,012) dan menampilkan kecocokan gelap x0,4/x0,25 dengan uji ketahanan (0,9035 / 0,8444). Perkiraan waktu 20-30 menit (belum diverifikasi).
+  5. Dibaca: INDEX, SOP, PREFERENCES, STATUS, DECISION, log_history, exp-report-1, proposal_feedback, REQUIREMENTS (rubrik). Claude menyusun kronologi proyek untuk user. Literature-review dan jobdesc-week-1 TIDAK dibaca.
+  6. Klarifikasi untuk user: model akhir = YOLOv8s (COCO pretrained) dilatih di dataset_split_v2, 2 kelas (D permanen, d susu), TANPA preprocessing khusus (foto asli; resize 640 dan normalisasi oleh Ultralytics; augmentasi bawaan termasuk CLAHE p=0,01 hanya saat training). Wacana "adaptive correction" ternyata sudah dicatat sebagai "pipeline adaptif berbasis aturan" (31 Okt; kontribusi proposal; Tahap 2 empat kondisi); diwujudkan sekarang lewat gate ketajaman + E-B.
+  7. Isi REQUIREMENTS (dibaca Claude): tahapan pipeline PCD (pra-pemrosesan, ruang warna, filtering/konvolusi, segmentasi, morfologi, ekstraksi fitur) dinyatakan OPSIONAL oleh dosen (dikonfirmasi user) tetapi HARUS sesuai solusi; rubrik menyorot kelengkapan tahapan pipeline, visualisasi sebelum-sesudah, dan kedalaman analisis tiap tahap; penilaian individu menanyakan konsep; luaran: aplikasi (input-proses-output, OpenCV), PPT, video <=10 menit, makalah IEEE 6-10 halaman dua kolom Times New Roman 10 dengan dua email dan pernyataan keaslian (rincian harus dicek ulang di REQUIREMENTS.md).
+  8. Cara menjalankan skrip (semua): sandbox "Salinan preprocessing_REF_v2", jalankan SEL 0 saja (data ke /content/v2_raw), JANGAN SEL 1P; unggah skrip ke /content; exec(open(...).read()) lalu panggil fungsinya; hasil zip diunduh (disk /content tidak permanen). Asumsi struktur: images/{split}, labels/{split}, split.csv berkolom split, subset, file, group_id; bobot E0b di /content/drive/MyDrive/final_project_pcd/runs_v2/pre_identity_s{0,1,2}/weights/best.pt.
+  9. Frontend awal aplikasi web per halaman sudah jadi (dinyatakan user); backend dan service model menunggu.
+
 - Selesai sesi ini:
   (Metrik acuan semua eksperimen: val mAP50 single_cls=True. Test hanya untuk dokumentasi.)
   1. E0b (pre_identity) seed 2 selesai: val 0,9089; test 0,8999. Dengan itu E0b 3 seed: val 0,9191 / 0,9142 / 0,9089, rata-rata 0,9141, SD sampel 0,0051. Sanity check template ref-v2 lolos 3 dari 3 seed (selisih val terhadap baseline raw +0,0013, +0,0017, +0,0008; seed 0 tercatat 0,9190 di uji ketahanan, hanya beda pembulatan). Nilai test E0b seed 0 dan 1 yang dikutip di sesi ini tidak terverifikasi, mohon cek ke CSV sebelum dipakai di laporan.

@@ -6,7 +6,7 @@
 >
 > Jika tidak bisa membuka link, minta user menempelkan isinya.
 
-Terakhir diperbarui: 2026-11-19
+Terakhir diperbarui: 2026-11-21
 
 ## Ringkasan
 - Tujuan: Mengembangkan prototipe sistem skrining awal yang menganalisis foto rongga mulut dari kamera smartphone untuk menampilkan indikasi beberapa kondisi gigi dan gusi.
@@ -15,12 +15,12 @@ Terakhir diperbarui: 2026-11-19
 - Batas Klaim: Alat ditujukan untuk skrining/edukasi awal, bukan diagnosis medis dan bukan pengganti pemeriksaan dokter gigi.
 
 ## Status saat ini
-E0b (pre_identity) selesai 3 seed dengan rata-rata val mAP50 0,9141 (SD 0,0051) dan sanity check lolos, namun nilai test seed 0 dan 1 belum terverifikasi. E1 (CLAHE) pada 2 seed gagal aturan keputusan dengan penurunan val ~0,021 dan tidak bisa diselamatkan, sedangkan E2 (specular) hanya kalibrasi dengan parameter usulan lolos batas keamanan namun kode belum diverifikasi. Uji ketahanan E0b mengungkap kerapuhan pada blur dan gerak (turun >0,02 level 2), dan quality gate v1 gagal kalibrasi karena ambang persentil alami tidak konsisten. Keputusan desain: gate untuk ketajaman, robustness training terpisah, template beku untuk E1, U-Net prioritas rendah; runtime Colab hilang, CSV aman di Drive, sandbox tidak untuk training.
+Verifikasi CSV E0b (3 seed) selesai dengan rata-rata val mAP50 0,9141 dan item "test seed 0/1 belum terverifikasi" ditutup. Analisis kesalahan best.pt E0b menunjukkan AP50 0,9124, recall 0,932, presisi 0,700; dominan FP pada latar dan lokalisasi, FN terutama lesi kecil, serta kesenjangan presisi Mandibular vs Maxillary akibat tebakan berlebih. Uji strata ketajaman/kecerahan/miring warna pada view oklusal tidak menemukan pengaruh konsisten (hanya 1 sel >0,02), tinjauan manual 30 FP teratas mengonfirmasi kesalahan pada gigi bukan jaringan lunak, dan penilaian dokter mendukung parsial dugaan label lesi dini tidak lengkap. Gate ketajaman E-A (Tenengrad) lolos pada val dan test oklusal (TPR>0,80, FPR<0,20), sedangkan koreksi gelap adaptif E-B siap dijalankan namun belum dieksekusi pada data asli.
 
 ## Langkah berikutnya
-1. Catat di DECISION.md: E1 gagal (+ angka), kalibrasi E2 dua detektor lengkap termasuk yang gagal, hasil uji ketahanan dan tingkat degradasi, aturan 0,02, E0b + CLAHE inferensi-saja gagal.
-2. Putuskan arah Tahap 1 berikutnya karena CLAHE gagal dan E2 diperkirakan netral: (a) setujui atau tolak protokol gate v2; (b) analisis kesalahan per strata pada best.pt E0b (blur, kecerahan, retraktor) yang belum dikerjakan; (c) maksimal 1 sampai 2 varian preprocessing baru yang ditetapkan sebelum dijalankan (kandidat: normalisasi warna/white balance, denoise ringan), 3 seed, pembanding E0b.
-3. Tanyakan ke dosen: daftar pipeline wajib atau contoh, dan tenggat final.
+1. Jalankan E-B (val saja), kirim teks keluaran (tabel mAP50, baris Kewajaran, verdict) ke Claude untuk tafsir. Jika gagal atau netral: hapus koreksi gelap dari aplikasi dan laporkan sebagai hasil negatif.
+2. Cek per view Tenengrad dan lihat foto bersih yang ditolak (val).
+3. Buat quality_gate.py (Tenengrad <1134,018 ditolak; hanya foto oklusal; keluaran diterima/ditolak + alasan) dan serahkan ke backend; backend dan service model (usul baseline raw seed 0).
 
 ## Keputusan penting (final)
 - Judul resmi project ini adalah Implementasi Teknik Pengolahan Citra Digital untuk Meningkatkan Deteksi Lesi Karies pada Foto Intraoral Remaja dan Dewasa Muda Berbasis Aplikasi Web
@@ -39,9 +39,9 @@ E0b (pre_identity) selesai 3 seed dengan rata-rata val mAP50 0,9141 (SD 0,0051) 
 ## Konteks tambahan (baca HANYA jika kondisinya terpenuhi)
 | File | Baca jika... |
 |---|---|
-| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/STATUS.md?v=20261119 | perlu detail progres |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/STATUS.md?v=20261121 | perlu detail progres |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/REQUIREMENTS.md?v=20261031 | perlu mengetahui detail spesifik ketentuan dari dosen |
-| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/DECISION.md?v=20261119 | akan mengusulkan perubahan arah |
+| https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/DECISION.md?v=20261121 | akan mengusulkan perubahan arah |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/internal_teams_files/literature-review.md?v=20261031 | butuh melihat hasil literature review yang telah dikumpulkan |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/extras/proposal_feedback.md?v=20261105 | butuh melihat hasil evaluasi proposal oleh dosen |
 | https://raw.githubusercontent.com/hippocampus-citadel/knowledge-bank/main/FINAL-PROJECT-PCD/extras/log_history?v=20261111 | perlu meninjau apa saja yang telah dilakukan di sesi sesi sebelumnya |
